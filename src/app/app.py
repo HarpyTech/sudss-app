@@ -54,16 +54,23 @@ def startup_event():
     except Exception as e:
         print(f"Failed to connect to MongoDB Atlas: {e}")
 
-
+# --- Database Disconnection on Shutdown ---
 @app.on_event("shutdown")
 def shutdown_db_client():
     me.disconnect()
     print("Disconnected from MongoDB.")
 
 # --- API Endpoints ---
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    html_file = './ui/index.html'
+    with open(html_file, 'r') as file:
+        html_content = file.read()  # In a real deployment, consider using StaticFiles to serve static assets
+ 
+    return HTMLResponse(content=html_content)
 
-@app.get("/")
-def read_root():
+@app.get("/health")
+def health_root():
     return {"status": "Clinical Diagnosis API is running."}
 
 @app.post("/diagnose")

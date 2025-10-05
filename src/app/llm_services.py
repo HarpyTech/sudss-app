@@ -6,8 +6,8 @@ import os
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
 # Initialize the models
-summary_model = genai.GenerativeModel('gemini-1.5-pro-latest')
-scoring_model = genai.GenerativeModel('gemini-1.5-flash-latest')
+summary_model = genai.GenerativeModel('gemini-2.5-pro')
+scoring_model = genai.GenerativeModel('gemini-2.5-flash')
 
 def generate_summary(image_data: bytes = None, text_data: str = None) -> str:
     """
