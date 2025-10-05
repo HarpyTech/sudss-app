@@ -4,6 +4,7 @@ from typing import Optional, List
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends
 from fastapi.responses import JSONResponse, StreamingResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import mongoengine as me
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -59,6 +60,9 @@ def startup_event():
 def shutdown_db_client():
     me.disconnect()
     print("Disconnected from MongoDB.")
+
+# Mount the 'static' folder at URL path '/static'
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # --- API Endpoints ---
 @app.get("/", response_class=HTMLResponse)
