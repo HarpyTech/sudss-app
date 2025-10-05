@@ -5,21 +5,26 @@ from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import mongoengine as me
+import google.generativeai as genai
+from dotenv import load_dotenv
 
 from models import CorrectionRequest, ReportResponse
 from database import Report
 import llm_services
 import utils
 
+# --- Load Environment Variables ---
+# This will load the variables from the .env file
+load_dotenv()
+
 # --- App Initialization ---
 app = FastAPI(title="Clinical Diagnosis AI Suite")
 
 # --- CORS Configuration ---
-# Allows the frontend to communicate with this backend
 origins = [
     "http://localhost",
-    "http://localhost:8000",
-    "null", # Allow requests from file:// protocol (local HTML file)
+    "http://localhost:3000",
+    "null", 
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -29,15 +34,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Database Connection ---
+# --- Database & GenAI Client Configuration on Startup ---
 @app.on_event("startup")
-def startup_db_client():
+def startup_event():
+    # Configure Google API Key
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+    if not google_api_key:
+        raise RuntimeError("GOOGLE_API_KEY environment variable not set.")
+    genai.configure(api_key=google_api_key)
+    print("Google Generative AI client configured.")
+
+    # Configure and connect to MongoDB Atlas
+    mongo_uri = os.getenv("MONGO_URI")
+    if not mongo_uri:
+        raise RuntimeError("MONGO_URI environment variable not set.")
     try:
-        # Assumes MongoDB is running on localhost
-        me.connect("clinical_reports_db", host="localhost", port=27017)
-        print("Successfully connected to MongoDB.")
+        me.connect(host=mongo_uri)
+        print("Successfully connected to MongoDB Atlas.")
     except Exception as e:
-        print(f"Failed to connect to MongoDB: {e}")
+        print(f"Failed to connect to MongoDB Atlas: {e}")
 
 
 @app.on_event("shutdown")
@@ -86,15 +101,14 @@ async def process_corrections(request: CorrectionRequest):
 
         # Create and save the report to MongoDB
         new_report = Report(
-            category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']), # Simulated category
-            input_type='Image' if 'Image' in request.original_summary else 'Text', # Simple inference
+            category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']),
+            input_type='Image' if 'Image' in request.original_summary else 'Text',
             trust_score=trust_score,
             summary=regenerated_summary
         )
         new_report.save()
 
         return JSONResponse(content={"summary": {"output": regenerated_summary}})
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to process corrections: {e}")
 
@@ -128,6 +142,5 @@ async def get_reports():
         raise HTTPException(status_code=500, detail=f"Failed to fetch reports: {e}")
 
 # To run this application:
-# 1. Make sure MongoDB is running.
-# 2. Set your GOOGLE_API_KEY environment variable.
-# 3. Run `uvicorn app:app --reload` in your terminal.
+# 1. Create a .env file with your MONGO_URI and GOOGLE_API_KEY.
+# 2. Run `uvicorn app:app --reload` in your terminal.

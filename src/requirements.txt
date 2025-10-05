@@ -5,3 +5,4 @@ pydantic
 mongoengine
 google-generativeai
 reportlab
+python-dotenv
