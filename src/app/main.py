@@ -8,7 +8,7 @@ import mongoengine as me
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-from models import CorrectionRequest, ReportResponse
+from models import CorrectionRequest, ReportResponse, DownloadRequest
 from database import Report
 import llm_services
 import utils
@@ -111,7 +111,8 @@ async def process_corrections(request: CorrectionRequest):
             category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']),
             input_type='Image' if 'Image' in request.original_summary else 'Text',
             trust_score=trust_score,
-            summary=regenerated_summary
+            summary=regenerated_summary,
+            details=request.original_summary
         )
         new_report.save()
 
@@ -121,14 +122,12 @@ async def process_corrections(request: CorrectionRequest):
 
 
 @app.post("/diagnose/download")
-async def download_report(
-    summary: str = Form(...)
-):
+async def download_report(request: DownloadRequest):
     """
     Converts a given summary text into a downloadable PDF file.
     """
     try:
-        pdf_bytes = utils.create_pdf_from_summary(summary)
+        pdf_bytes = utils.create_pdf_from_summary(request.summary)
         return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf", headers={
             "Content-Disposition": "attachment; filename=diagnosis_summary.pdf"
         })

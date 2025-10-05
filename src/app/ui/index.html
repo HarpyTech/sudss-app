@@ -7,8 +7,11 @@
     <title>Clinical Diagnosis & Evaluation Suite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/typography/dist/typography.min.css" rel="stylesheet">
     <!-- Chart.js for dashboards -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* Hide elements by default */
         .page-hidden {
@@ -334,7 +337,7 @@
                 if (pageId === 'reporting') renderReportHistory(1);
                 if (pageId === 'evaluations') renderEvaluationDashboard();
             };
-            navLinks.forEach(link => link.addEventListener('click', (e) => {e.preventDefault(); showPage(e.target.dataset.page);}));
+            navLinks.forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); showPage(e.target.dataset.page); }));
 
             // --- UI HELPERS ---
             const showToast = (message, isError = false) => {
@@ -345,8 +348,8 @@
                 setTimeout(() => toast.remove(), 4000);
             };
             const setLoadingState = (isLoading, action) => {
-                const spinner = {diagnose: diagnoseSpinner, download: downloadSpinner, feedback: feedbackSpinner}[action];
-                const button = {diagnose: diagnoseBtn, download: downloadBtn, feedback: feedbackBtn}[action];
+                const spinner = { diagnose: diagnoseSpinner, download: downloadSpinner, feedback: feedbackSpinner }[action];
+                const button = { diagnose: diagnoseBtn, download: downloadBtn, feedback: feedbackBtn }[action];
                 spinner.classList.toggle('hidden', !isLoading);
                 button.disabled = isLoading;
                 if (action === 'diagnose' || action === 'feedback') {
@@ -369,7 +372,7 @@
                 const mockData = [];
                 const categories = ['X-Ray', 'MRI', 'General', 'Lab'], summaries = ['Chest X-ray shows minor infiltrates...', 'Brain MRI indicates no acute abnormalities...', 'Patient presents with seasonal allergies...', 'Blood panel shows elevated WBC...', 'Left tibia fracture confirmed...', 'Routine check-up, vitals stable...', 'Spinal MRI shows mild disc herniation...', 'No evidence of pneumonia...', 'Urinalysis is clear...', 'Dermatological image shows benign nevus...'];
                 for (let i = 0; i < 53; i++) {
-                    mockData.push({id: Date.now() - i, date: new Date(Date.now() - i * 18e6).toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}), category: categories[i % 4], inputType: i % 3 === 0 ? 'Text' : 'Image', trustScore: (Math.random() * 23.5 + 75).toFixed(1), summary: summaries[i % 10]});
+                    mockData.push({ id: Date.now() - i, date: new Date(Date.now() - i * 18e6).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }), category: categories[i % 4], inputType: i % 3 === 0 ? 'Text' : 'Image', trustScore: (Math.random() * 23.5 + 75).toFixed(1), summary: summaries[i % 10] });
                 }
                 saveMockHistory(mockData);
             };
@@ -388,12 +391,12 @@
 
             // --- FILE HANDLING ---
             fileUploadArea.addEventListener('click', () => fileInput.click());
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, e => {e.preventDefault(); e.stopPropagation();}));
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, e => { e.preventDefault(); e.stopPropagation(); }));
             ['dragenter', 'dragover'].forEach(evName => fileUploadArea.addEventListener(evName, () => fileUploadArea.classList.add('border-indigo-500', 'bg-indigo-50')));
             ['dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, () => fileUploadArea.classList.remove('border-indigo-500', 'bg-indigo-50')));
-            fileUploadArea.addEventListener('drop', e => {fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change', {bubbles: true}));});
+            fileUploadArea.addEventListener('drop', e => { fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change', { bubbles: true })); });
             fileInput.addEventListener('change', () => {
-                if (fileInput.files.length > 0) {selectedFile = fileInput.files[0]; fileUploadText.textContent = selectedFile.name; showToast('File selected: ' + selectedFile.name);}
+                if (fileInput.files.length > 0) { selectedFile = fileInput.files[0]; fileUploadText.textContent = selectedFile.name; showToast('File selected: ' + selectedFile.name); }
             });
 
             // --- DIAGNOSIS PAGE LOGIC ---
@@ -401,19 +404,24 @@
                 try {
                     const result = await response.json();
                     currentSummary = result.summary.output; // Save for feedback
-                    const formattedHtml = currentSummary.replace(/### (.*)/g, '<h3 class="font-bold text-lg mt-4 mb-2">$1</h3>').replace(/- (.*)/g, '<li>$1</li>').replace(/\n/g, '<br>');
-                    outputArea.innerHTML = `<ul>${formattedHtml}</ul>`;
+                    // Convert markdown -> HTML
+                    const html = marked.parse(currentSummary);
+                    outputArea.innerHTML = `<div class="prose">${html}</div>`;
 
                     if (!isRegeneration) {
                         // Only add to history on initial generation for this demo
-                        addMockHistoryEntry({id: Date.now(), date: new Date().toLocaleString(), category: ['X-Ray', 'MRI', 'General', 'Lab'][Math.floor(Math.random() * 4)], inputType: selectedFile ? 'Image' : 'Text', trustScore: (Math.random() * 23.5 + 75).toFixed(1), summary: currentSummary.split('\n')[0].replace('### ', '') + '...'});
+                        addMockHistoryEntry({ id: Date.now(), date: new Date().toLocaleString(), category: ['X-Ray', 'MRI', 'General', 'Lab'][Math.floor(Math.random() * 4)], inputType: selectedFile ? 'Image' : 'Text', trustScore: (Math.random() * 23.5 + 75).toFixed(1), summary: currentSummary.split('\n')[0].replace('### ', '') + '...' });
                     }
-                } catch (e) {showToast('Failed to parse the diagnosis response.', true); outputArea.innerHTML = '<p class="text-red-500">Error: Could not display result.</p>';}
+                } catch (e) { showToast('Failed to parse the diagnosis response.', true); outputArea.innerHTML = '<p class="text-red-500">Error: Could not display result.</p>'; }
             };
 
             diagnoseBtn.addEventListener('click', async () => {
                 const text = textInput.value.trim();
-                if (!selectedFile && !text) {showToast('Please upload a file or enter text.', true); return;}
+                if (!selectedFile && !text) {
+                    showToast('Please upload a file or enter text.', true);
+                    return;
+                }
+
                 setLoadingState(true, 'diagnose');
                 outputArea.innerHTML = '<p class="text-gray-500 italic">Generating diagnosis...</p>';
 
@@ -421,25 +429,30 @@
                 if (selectedFile) formData.append('file', selectedFile);
                 if (text) formData.append('text', text);
 
-                let response = await fetchFromApi('diagnose', {method: 'POST', body: formData});
+                let response = await fetchFromApi('diagnose', { method: 'POST', body: formData });
                 if (response) {
                     await handleApiResponse(response);
-                } else { // Fallback to mock
-                    const mockResponse = {summary: {output: "### Mock Findings\n- Fallback due to API failure.\n- The scan shows clear signs of bilateral pneumonia."}};
+                } else {
+                    // Fallback to mock
+                    const mockResponse = {
+                        summary: { output: "### Mock Findings\n- Fallback due to API failure.\n- The scan shows clear signs of bilateral pneumonia." }
+                    };
                     currentSummary = mockResponse.summary.output;
-                    outputArea.innerHTML = `<ul>${currentSummary.replace(/### (.*)/g, '<h3 class="font-bold text-lg mt-4 mb-2">$1</h3>').replace(/- (.*)/g, '<li>$1</li>').replace(/\n/g, '<br>')}</ul>`;
+                    // Convert markdown -> HTML
+                    const html = marked.parse(currentSummary);
+                    outputArea.innerHTML = `<div class="prose">${html}</div>`;
                 }
                 setLoadingState(false, 'diagnose');
             });
 
             feedbackBtn.addEventListener('click', async () => {
                 const feedbackText = feedbackInput.value.trim();
-                if (!feedbackText) {showToast('Please enter feedback to submit.', true); return;}
-                if (!currentSummary) {showToast('Please generate a report before submitting feedback.', true); return;}
+                if (!feedbackText) { showToast('Please enter feedback to submit.', true); return; }
+                if (!currentSummary) { showToast('Please generate a report before submitting feedback.', true); return; }
                 setLoadingState(true, 'feedback');
                 outputArea.innerHTML = '<p class="text-gray-500 italic">Regenerating report based on feedback...</p>';
 
-                const response = await fetchFromApi('corrections', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({originalSummary: currentSummary, feedback: feedbackText})});
+                const response = await fetchFromApi('corrections', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ original_summary: currentSummary, feedback: feedbackText, report_id: null }) });
                 if (response) {
                     await handleApiResponse(response, true);
                 } else {
@@ -453,18 +466,17 @@
             downloadBtn.addEventListener('click', async () => {
                 setLoadingState(true, 'download');
                 const text = textInput.value.trim();
-                const formData = new FormData();
-                if (selectedFile) formData.append('file', selectedFile);
-                if (text) formData.append('text', text);
 
-                const response = await fetchFromApi('diagnose/download', {method: 'POST', body: formData});
+                const response = await fetchFromApi('diagnose/download', 
+                { method: 'POST', body: JSON.stringify({ summary: currentSummary || 'No summary generated.' }),
+                 headers: { 'Content-Type': 'application/json' } });
                 let blob;
 
                 if (response) {
                     blob = await response.blob();
                 } else { // Fallback to mock PDF
                     showToast('API failed. Providing a mock PDF report.', true);
-                    blob = new Blob([`Mock PDF Report\nDate: ${new Date().toLocaleString()}\n\nSummary:\n${currentSummary || 'No summary generated.'}`], {type: 'application/pdf'});
+                    blob = new Blob([`Mock PDF Report\nDate: ${new Date().toLocaleString()}\n\nSummary:\n${currentSummary || 'No summary generated.'}`], { type: 'application/pdf' });
                 }
 
                 const url = window.URL.createObjectURL(blob);
@@ -501,7 +513,7 @@
                 document.getElementById('reporting-content').classList.remove('hidden');
 
                 historyTableBody.innerHTML = '';
-                if (history.length === 0) {historyTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500 py-4">No diagnosis history found.</td></tr>'; paginationControls.innerHTML = ''; return;}
+                if (history.length === 0) { historyTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500 py-4">No diagnosis history found.</td></tr>'; paginationControls.innerHTML = ''; return; }
 
                 const paginatedItems = history.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
                 paginatedItems.forEach(entry => {
@@ -519,7 +531,7 @@
                 document.getElementById('evaluations-loading').classList.add('hidden');
                 document.getElementById('evaluations-content').classList.remove('hidden');
 
-                if (history.length === 0) {avgTrustScoreEl.textContent = '0.0%'; totalReportsEl.textContent = '0'; highestCategoryEl.textContent = 'N/A'; return;}
+                if (history.length === 0) { avgTrustScoreEl.textContent = '0.0%'; totalReportsEl.textContent = '0'; highestCategoryEl.textContent = 'N/A'; return; }
 
                 const totalScore = history.reduce((acc, curr) => acc + parseFloat(curr.trustScore), 0);
                 avgTrustScoreEl.textContent = `${(totalScore / history.length).toFixed(1)}%`;
@@ -527,15 +539,15 @@
 
                 const categoryData = {}, labels = [], avgScoresByCategory = [], countsByCategory = [];
                 history.forEach(entry => {
-                    if (!categoryData[entry.category]) categoryData[entry.category] = {scores: [], count: 0};
+                    if (!categoryData[entry.category]) categoryData[entry.category] = { scores: [], count: 0 };
                     categoryData[entry.category].scores.push(parseFloat(entry.trustScore));
                     categoryData[entry.category].count++;
                 });
 
-                for (const cat in categoryData) {labels.push(cat); countsByCategory.push(categoryData[cat].count); avgScoresByCategory.push(categoryData[cat].scores.reduce((a, b) => a + b, 0) / categoryData[cat].scores.length);}
+                for (const cat in categoryData) { labels.push(cat); countsByCategory.push(categoryData[cat].count); avgScoresByCategory.push(categoryData[cat].scores.reduce((a, b) => a + b, 0) / categoryData[cat].scores.length); }
 
                 let maxAvg = 0, bestCat = 'N/A';
-                avgScoresByCategory.forEach((avg, i) => {if (avg > maxAvg) {maxAvg = avg; bestCat = labels[i];} });
+                avgScoresByCategory.forEach((avg, i) => { if (avg > maxAvg) { maxAvg = avg; bestCat = labels[i]; } });
                 highestCategoryEl.textContent = bestCat;
 
                 renderBarChart('category-chart', 'Avg. Trust Score', labels, avgScoresByCategory);
@@ -545,10 +557,10 @@
             const renderChart = (canvasId, type, label, labels, data, options = {}) => {
                 const colors = ['#4f46e5', '#10b981', '#f59e0b', '#3b82f6'];
                 if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
-                chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), {type, data: {labels, datasets: [{label, data, backgroundColor: colors, hoverOffset: 4, borderRadius: 4}]}, options});
+                chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type, data: { labels, datasets: [{ label, data, backgroundColor: colors, hoverOffset: 4, borderRadius: 4 }] }, options });
             };
-            const renderBarChart = (id, lbl, lbs, d) => renderChart(id, 'bar', lbl, lbs, d, {maintainAspectRatio: false, scales: {y: {beginAtZero: true, max: 100}}, plugins: {legend: {display: false}}});
-            const renderDoughnutChart = (id, lbl, lbs, d) => renderChart(id, 'doughnut', lbl, lbs, d, {maintainAspectRatio: false, plugins: {legend: {position: 'bottom'}}});
+            const renderBarChart = (id, lbl, lbs, d) => renderChart(id, 'bar', lbl, lbs, d, { maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } });
+            const renderDoughnutChart = (id, lbl, lbs, d) => renderChart(id, 'doughnut', lbl, lbs, d, { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } });
 
             // --- INITIALIZATION ---
             initializeMockData();

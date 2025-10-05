@@ -19,7 +19,7 @@ class Report(me.Document):
             "id": str(self.id),
             "date": self.generated_date.strftime("%Y-%m-%d, %I:%M %p"),
             "category": self.category,
-            "input_type": self.input_type,
-            "trust_score": self.trust_score,
+            "inputType": self.input_type,
+            "trustScore": self.trust_score,
             "summary": self.summary
         }
