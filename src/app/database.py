@@ -10,6 +10,7 @@ class Report(me.Document):
     input_type = me.StringField(required=True, choices=['Image', 'Text'])
     trust_score = me.FloatField(min_value=0, max_value=100, default=0.0)
     summary = me.StringField(required=True)
+    details = me.StringField()
 
     def to_dict(self):
         """

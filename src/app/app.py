@@ -8,7 +8,7 @@ import mongoengine as me
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-from models import CorrectionRequest, ReportResponse
+from models import CorrectionRequest, ReportResponse, AcceptReportRequest, DownloadRequest
 from database import Report
 import llm_services
 import utils
@@ -147,6 +147,26 @@ async def get_reports():
         return [report.to_dict() for report in reports]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch reports: {e}")
+
+@app.post("/accept")
+async def process_acceptance(request: AcceptReportRequest):
+    """
+    saves the final report to the database with full trust considering the clinician downloaded the report.
+    """
+    try:
+        # Create and save the report to MongoDB
+        new_report = Report(
+            category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']),
+            input_type='Image' if 'Image' in request.summary else 'Text',
+            trust_score=100,
+            summary=request.summary,
+            details=request.summary
+        )
+        new_report.save()
+
+        return JSONResponse(content={"message": "Report accepted and saved.", status_code: 200 , status: "success"})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to process corrections: {e}")
 
 # To run this application:
 # 1. Create a .env file with your MONGO_URI and GOOGLE_API_KEY.

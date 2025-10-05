@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Markdown rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom Styles -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <style>
         /* Hide elements by default */
         .page-hidden {
@@ -462,32 +464,58 @@
                 feedbackInput.value = '';
                 setLoadingState(false, 'feedback');
             });
-
             downloadBtn.addEventListener('click', async () => {
-                setLoadingState(true, 'download');
-                const text = textInput.value.trim();
+                setLoadingState(true, 'download'); // accept
 
-                const response = await fetchFromApi('diagnose/download', 
-                { method: 'POST', body: JSON.stringify({ summary: currentSummary || 'No summary generated.' }),
-                 headers: { 'Content-Type': 'application/json' } });
-                let blob;
-
+                const response = await fetchFromApi('accept', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ summary: currentSummary }) });
                 if (response) {
-                    blob = await response.blob();
-                } else { // Fallback to mock PDF
-                    showToast('API failed. Providing a mock PDF report.', true);
-                    blob = new Blob([`Mock PDF Report\nDate: ${new Date().toLocaleString()}\n\nSummary:\n${currentSummary || 'No summary generated.'}`], { type: 'application/pdf' });
-                }
+                    const result = await response.json();
+                    if (!result?.message) {
+                        showToast(result?.message || 'Failed to accept the report.', true);
+                        setLoadingState(false, 'download');
+                        return;
+                    } 
+                    
+                    showToast(result?.message || 'Report accepted successfully.');
+                
 
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none'; a.href = url; a.download = 'diagnosis_summary.pdf';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                a.remove();
+                // Use currentSummary directly (Markdown string)
+                const markdown = currentSummary || 'No summary generated.';
+                
+                // Convert Markdown → plain text (strip HTML)
+                const html = marked.parse(markdown);
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = html;
+                const plainText = tempDiv.innerText; // extract readable text
 
+                // Initialize jsPDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Add title
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(16);
+                doc.text("Diagnostic Report", 14, 20);
+
+                // Add timestamp
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Date: ${new Date().toLocaleString()}`, 14, 28);
+
+                // Add summary text
+                doc.setFontSize(12);
+                const splitText = doc.splitTextToSize(plainText, 180); // wrap text
+                doc.text(splitText, 14, 40);
+
+                // Save as PDF
+                doc.save("diagnosis_summary.pdf");
+                showToast('Report Downloaded successfully.');
+                tempDiv.remove();
                 setLoadingState(false, 'download');
+                } else {
+                    showToast('Failed to accept the report.', true);
+                    setLoadingState(false, 'download');
+                }
             });
 
             // --- REPORTING & EVALUATIONS LOGIC ---

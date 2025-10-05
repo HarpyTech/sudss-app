@@ -8,7 +8,7 @@ import mongoengine as me
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-from models import CorrectionRequest, ReportResponse, DownloadRequest
+from models import CorrectionRequest, ReportResponse, DownloadRequest, AcceptReportRequest
 from database import Report
 import llm_services
 import utils
@@ -117,6 +117,26 @@ async def process_corrections(request: CorrectionRequest):
         new_report.save()
 
         return JSONResponse(content={"summary": {"output": regenerated_summary}})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to process corrections: {e}")
+
+@app.post("/accept")
+async def process_acceptance(request: AcceptReportRequest):
+    """
+    saves the final report to the database with full trust considering the clinician downloaded the report.
+    """
+    try:
+        # Create and save the report to MongoDB
+        new_report = Report(
+            category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']),
+            input_type='Image' if 'Image' in request.summary else 'Text',
+            trust_score=100,
+            summary=request.summary,
+            details=request.summary
+        )
+        new_report.save()
+
+        return JSONResponse(content={"message": "Report accepted and saved successfully."})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to process corrections: {e}")
 

@@ -9,6 +9,12 @@ class CorrectionRequest(BaseModel):
     feedback: str
     report_id: Optional[int] = None # To link feedback to a specific report
 
+class AcceptReportRequest(BaseModel):
+    """
+    Schema for a clinician's feedback on a generated summary.
+    """
+    summary: str
+
 class ReportResponse(BaseModel):
     """
     Schema for a single report object returned from the API.
