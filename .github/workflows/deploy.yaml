@@ -54,7 +54,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          IMAGE_NAME=gcr.io/$PROJECT_ID/sudss-${{ github.ref_name }}
+          IMAGE_NAME=gcr.io/$PROJECT_ID/sudss-app-proto${{ github.ref_name }}
           gcloud builds submit --tag $IMAGE_NAME
 
       - name: Deploy to Cloud Run (directly set env vars from GitHub Secrets)
