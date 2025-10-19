@@ -6,3 +6,12 @@ mongoengine
 google-generativeai
 reportlab
 python-dotenv
+# Optional/advanced - required to run MedSigLIP / MedGemma locally
+transformers
+torch
+torchvision
+faiss-cpu
+Pillow
+huggingface-hub
+langchain
+bitsandbytes

@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app code
 COPY ./src/app/ .
+COPY ./src/embeddings/ ./embeddings/
 
 # Expose port
 EXPOSE 8080

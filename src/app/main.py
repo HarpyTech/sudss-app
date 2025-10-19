@@ -13,6 +13,8 @@ from models import CorrectionRequest, ReportResponse, DownloadRequest, AcceptRep
 from database import Report
 import llm_services
 import utils
+from pydantic import BaseModel
+from typing import Dict, Any
 
 # --- Load Environment Variables ---
 # This will load the variables from the .env file
@@ -34,6 +36,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# releavtive path to embeddings
+embeddings_path = "../embeddings/"
+index_path = os.path.join(embeddings_path, "images.index")
+meta_path = os.path.join(embeddings_path, "metadata.jsonl")
 
 # --- Database & GenAI Client Configuration on Startup ---
 @app.on_event("startup")
@@ -96,6 +103,36 @@ async def diagnose(
         return JSONResponse(content={"summary": {"output": summary}})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")
+
+
+@app.post("/retrieve_and_generate")
+async def retrieve_and_generate(image: UploadFile = File(...)):
+    """Endpoint that: 1) retrieves top-k reports using MedSigLIP+FAISS and 2) runs MedGemma with those reports as context.
+
+    index_path and meta_path should be accessible on the server filesystem (or mounted).
+    """
+
+    image_data = await image.read()
+    try:
+        result = llm_services.retrieve_then_generate(
+            image_data=image_data,
+            index_path=index_path,
+            meta_path=meta_path,
+            medsiglip_model="google/medsiglip-448",
+            medgemma_variant="4b-it",
+            k=5,
+            hf_token=os.getenv("HF_TOKEN"),
+        )
+        try:
+            print("Retrieve and Generate Result:", result)
+
+            return JSONResponse(content={"result": result})
+        except Exception as e:
+            return result
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed retrieve+generate: {e}")
+
 
 
 @app.post("/corrections")
