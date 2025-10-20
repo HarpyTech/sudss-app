@@ -121,6 +121,11 @@ async def diagnose(
         print("Replacing images in the summary...")
         summary = convert_images_to_base64(summary)
         print("Final Summary after replacing images:", summary)
+        # import json
+        # file = "C:\\Users\\lokesh-g\\Desktop\\sudss-app\\inference_output_20251020_160742.json"
+        # with open(file, "r", encoding='utf-8') as f: 
+        #     summary = f.read()
+        #     summary = json.loads(summary)
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
         return JSONResponse(content={"summary": {"output": summary}})
     except Exception as e:

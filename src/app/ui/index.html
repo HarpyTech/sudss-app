@@ -409,14 +409,24 @@
                     const result = await response.json();
                     currentSummary = result.summary.output; // Save for feedback
                     // Convert markdown -> HTML
-                    const html = marked.parse(currentSummary);
+
+                    const assistantEntry = currentSummary.find(entry => entry.role === "assistant");
+
+                    if (assistantEntry) {
+                    console.log("Assistant content:", assistantEntry.content);
+                    const html = marked.parse(assistantEntry.content);
                     outputArea.innerHTML = `<div class="prose">${html}</div>`;
+                    } else {
+                    console.log("No assistant entry found.");
+                    }
+                    currentSummary = assistantEntry ? assistantEntry.content : currentSummary;
+
 
                     if (!isRegeneration) {
                         // Only add to history on initial generation for this demo
                         addMockHistoryEntry({ id: Date.now(), date: new Date().toLocaleString(), category: ['X-Ray', 'MRI', 'General', 'Lab'][Math.floor(Math.random() * 4)], inputType: selectedFile ? 'Image' : 'Text', trustScore: (Math.random() * 23.5 + 75).toFixed(1), summary: currentSummary.split('\n')[0].replace('### ', '') + '...' });
                     }
-                } catch (e) { showToast('Failed to parse the diagnosis response.', true); outputArea.innerHTML = '<p class="text-red-500">Error: Could not display result.</p>'; }
+                } catch (e) { console.error(e); showToast('Failed to parse the diagnosis response.', true); outputArea.innerHTML = '<p class="text-red-500">Error: Could not display result.</p>'; }
             };
 
             diagnoseBtn.addEventListener('click', async () => {
@@ -430,8 +440,8 @@
                 outputArea.innerHTML = '<p class="text-gray-500 italic">Generating diagnosis...</p>';
 
                 const formData = new FormData();
-                if (selectedFile) formData.append('file', selectedFile);
-                if (text) formData.append('text', text);
+                if (selectedFile) formData.append('image', selectedFile);
+                formData.append('text', text ? text : 'Describe the given Image');
 
                 let response = await fetchFromApi('diagnose', { method: 'POST', body: formData });
                 if (response) {
