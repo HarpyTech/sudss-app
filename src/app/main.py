@@ -16,6 +16,9 @@ import utils
 from pydantic import BaseModel
 from typing import Dict, Any
 
+from agents.fetch import summarize, load_metadata_jsonl, startup_load
+from agents.gemma import load_pipeline_at_startup, infer, convert_images_to_base64
+
 # --- Load Environment Variables ---
 # This will load the variables from the .env file
 load_dotenv()
@@ -52,6 +55,14 @@ def startup_event():
     genai.configure(api_key=google_api_key)
     print("Google Generative AI client configured.")
 
+    print("Preparing the Medgemma model...  This may take a while.")
+    load_pipeline_at_startup()
+    print("Medgemma model is ready.")
+
+    print("Loading FAISS index and metadata...")
+    startup_load()    
+    print("FAISS index and metadata loaded.")
+
     # Configure and connect to MongoDB Atlas
     mongo_uri = os.getenv("MONGO_URI")
     if not mongo_uri:
@@ -69,16 +80,19 @@ def shutdown_db_client():
     print("Disconnected from MongoDB.")
 
 # Mount the 'static' folder at URL path '/static'
-app.mount("/static", StaticFiles(directory="static"), name="static")
+statis_path = os.path.join(os.path.dirname(__file__), 'static')
+app.mount("/static", StaticFiles(directory=statis_path), name="static")
 
 # --- API Endpoints ---
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    html_file = './ui/index.html'
-    with open(html_file, 'r') as file:
-        html_content = file.read()  # In a real deployment, consider using StaticFiles to serve static assets
- 
-    return HTMLResponse(content=html_content)
+    html_file = os.path.join(os.path.dirname(__file__), 'ui', 'index.html')
+    try:
+        with open(html_file, 'r', encoding='utf-8') as file:
+            html_content = file.read()
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read HTML file: {e}")
 
 @app.get("/health")
 def health_root():
@@ -86,8 +100,8 @@ def health_root():
 
 @app.post("/diagnose")
 async def diagnose(
-    image: Optional[UploadFile] = File(None),
-    text: Optional[str] = Form(None)
+    image: Optional[UploadFile] = File(...),
+    text: Optional[str] = Form(...)
 ):
     """
     Generates a preliminary diagnostic summary from an image, text, or both.
@@ -99,7 +113,15 @@ async def diagnose(
     image_data = await image.read() if image else None
     
     try:
-        summary = llm_services.generate_summary(image_data=image_data, text_data=text)
+        prepare_context = summarize(image_data)
+        result = infer(image_data, prepare_context)
+        summary = result # .generated_text
+        print("Type of Summary:", type(summary))
+        print("Generated Summary:", summary)
+        print("Replacing images in the summary...")
+        summary = convert_images_to_base64(summary)
+        print("Final Summary after replacing images:", summary)
+        # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
         return JSONResponse(content={"summary": {"output": summary}})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")

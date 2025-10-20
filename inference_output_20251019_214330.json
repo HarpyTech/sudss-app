@@ -1,0 +1,24 @@
+[
+    {
+        "role": "system",
+        "content": [
+            {
+                "type": "text",
+                "text": "You are an expert radiologist. Explain how the summarization was defined with respect to the given X-ray."
+            }
+        ]
+    },
+    {
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "You are a radiology assistant. Use the example reports below as reference.\n\n--- Example 1 | uid: 17 | projection: Lateral | score: 0.9354 ---\nFindings: No focal areas of consolidation. No suspicious pulmonary opacities. Heart size within normal limits. No pleural effusions. No evidence of pneumothorax. Osseous structures intact.\nImpression: No acute cardiopulmonary abnormality.\n\n--- Example 2 | uid: 24 | projection: Lateral | score: 0.9141 ---\nFindings: Cardiomediastinal silhouette is within normal limits of size and appearance. The pulmonary vascularity is unremarkable. Lungs are expanded and clear of airspace disease. Negative for pneumothorax or pleural effusion. Limited bone evaluation reveals no acute abnormality. There is incompletely evaluated lumbar levoscoliosis.\nImpression: No acute cardiopulmonary abnormality.\n\n--- Example 3 | uid: 22 | projection: Lateral | score: 0.8978 ---\nFindings: The lungs are clear, and without focal air space opacity. The cardiomediastinal silhouette is normal in size and contour, and stable. There is no pneumothorax large pleural effusion.\nImpression: No acute cardiopulmonary abnormality.\n\n--- Example 4 | uid: 11 | projection: Lateral | score: 0.8854 ---\nFindings: Cardiomediastinal silhouette and pulmonary vasculature are within normal limits. Lungs are clear. No pneumothorax or pleural effusion. No acute osseous findings.\nImpression: No acute cardiopulmonary findings.\n\n--- Example 5 | uid: 1 | projection: Lateral | score: 0.8848 ---\nFindings: The cardiac silhouette and mediastinum size are within normal limits. There is no pulmonary edema. There is no focal consolidation. There are no XXXX of a pleural effusion. There is no evidence of pneumothorax.\nImpression: Normal chest x-XXXX.\n\n"
+            },
+            {
+                "type": "image",
+                "image": "dakjd"
+            }
+        ]
+    }
+]
