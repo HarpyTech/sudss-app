@@ -213,7 +213,7 @@ def infer(
     import datetime
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"inference_output_{timestamp}.json"
+    filename = f"./misc/inference_output_{timestamp}.json"
 
     data_result = convert_images_to_base64(list(generated_text))
     try:

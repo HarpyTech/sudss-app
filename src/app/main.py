@@ -101,7 +101,10 @@ def health_root():
 @app.post("/diagnose")
 async def diagnose(
     image: Optional[UploadFile] = File(...),
-    text: Optional[str] = Form(...)
+    text: Optional[str] = Form(...),
+    is_base_retrival: Optional[bool] = Form(False),
+    corrections: Optional[str] = Form(None),
+    previous_summary: Optional[str] = Form(None),
 ):
     """
     Generates a preliminary diagnostic summary from an image, text, or both.
@@ -113,7 +116,7 @@ async def diagnose(
     image_data = await image.read() if image else None
     
     try:
-        prepare_context = summarize(image_data)
+        prepare_context = summarize(image_data, is_base_retrival)
         result = infer(image_data, prepare_context)
         summary = result # .generated_text
         print("Type of Summary:", type(summary))
