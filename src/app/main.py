@@ -129,6 +129,7 @@ async def diagnose(
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
         return JSONResponse(content={"summary": {"output": summary}})
     except Exception as e:
+        print(f"Error during diagnosis: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")
 
 

@@ -27,21 +27,18 @@ import os
 # --------------------------
 # Hardcoded configuration
 # --------------------------
-INDEX_PATH = os.path.abspath("./src/embeddings/images.index")          # hardcoded index file
-META_PATH = os.path.abspath("./src/embeddings/metadata.jsonl")          # hardcoded metadata jsonl
-MEDSIGLIP_MODEL = "google/medsiglip-448"              # medsiglip model used for embeddings
+INDEX_PATH = os.path.abspath("./src/embeddings/images.index")  # hardcoded index file
+META_PATH = os.path.abspath("./src/embeddings/metadata.jsonl")  # hardcoded metadata jsonl
+MEDSIGLIP_MODEL = "google/medsiglip-448"  # medsiglip model used for embeddings
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-TOP_K = 5                                             # top-k retrieval
-MAX_CONTEXT_REPORTS = 5                               
-MAX_NEW_TOKENS = 256                                  # generation length limit
-PROMPT_TRUNCATE_PREVIEW = 1000                        # how many chars to return in prompt preview
+TOP_K = 5
+MAX_CONTEXT_REPORTS = 5
+MAX_NEW_TOKENS = 256
+PROMPT_TRUNCATE_PREVIEW = 1000
 
 # --------------------------
 # App & global state
 # --------------------------
-# app = FastAPI(title="RetrieveAndSummarize (FAISS + MedSigLIP + text-gen)")
-
-# globals to load at startup
 FAISS_INDEX = None
 METADATA: List[Dict[str, Any]] = []
 EMBEDDER = None
@@ -50,7 +47,7 @@ GEN_MODEL = None
 
 
 # --------------------------
-# Utilities (converted from your script)
+# Utilities
 # --------------------------
 def load_metadata_jsonl(path: str) -> List[Dict[str, Any]]:
     meta = []
@@ -71,7 +68,6 @@ class MedSigLIPEmbedder:
     def __init__(self, model_name: str, device: torch.device):
         self.device = device
         self.processor = AutoImageProcessor.from_pretrained(model_name)
-        # load the model that produces image features; trust_remote_code may be required
         self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(device)
         self.model.eval()
 
@@ -91,11 +87,47 @@ class MedSigLIPEmbedder:
                     feats = out.last_hidden_state[:, 0, :]
                 else:
                     raise RuntimeError("Could not extract image features from model output")
-            if not isinstance(feats, torch.Tensor):
-                feats = torch.tensor(np.asarray(feats)).to(self.device)
-            feats = torch.nn.functional.normalize(feats, p=2, dim=-1)
-            emb = feats.cpu().numpy().astype("float32")  # shape (1, D)
+        if not isinstance(feats, torch.Tensor):
+            feats = torch.tensor(np.asarray(feats)).to(self.device)
+        feats = torch.nn.functional.normalize(feats, p=2, dim=-1)
+        emb = feats.cpu().numpy().astype("float32")
         return emb
+
+def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
+        # ==========================================================
+    # 2️⃣ STRONG HYBRID RETRIEVAL WITH THRESHOLD (IMAGE-ONLY)
+    # ==========================================================
+    db_embs = FAISS_INDEX.reconstruct_n(0, FAISS_INDEX.ntotal)
+    db_embs = np.array(db_embs, dtype=np.float32)
+
+    # Normalize
+    db_embs = db_embs / np.linalg.norm(db_embs, axis=1, keepdims=True)
+    q_emb_norm = q_emb / np.linalg.norm(q_emb, axis=1, keepdims=True)
+
+    # Multiple similarity measures
+    cos_sim = np.dot(db_embs, q_emb_norm.squeeze())
+    dot_sim = np.dot(db_embs, q_emb.squeeze())
+    l2_dist = np.linalg.norm(db_embs - q_emb, axis=1)
+    inv_euc_sim = 1 / (1 + l2_dist)
+
+    # Weighted hybrid fusion
+    alpha, beta, gamma = 0.5, 0.3, 0.2
+    hybrid_score = alpha * cos_sim + beta * dot_sim + gamma * inv_euc_sim
+
+    # Apply threshold
+    threshold = 0.8
+    valid_indices = np.where(hybrid_score >= threshold)[0]
+    if len(valid_indices) == 0:
+        valid_indices = np.arange((hybrid_score))
+
+    # Sort and select top-K
+    sorted_indices = valid_indices[np.argsort(hybrid_score[valid_indices])[::-1]]
+    topk_indices = sorted_indices[:TOP_K]
+    scores = hybrid_score[topk_indices]
+    ids = topk_indices.tolist()
+
+    print(f"✅ Retrieved {len(topk_indices)} results above threshold {threshold}")
+    return scores, ids
 
 
 def retrieve_topk(index, q_emb: np.ndarray, k: int):
@@ -114,13 +146,17 @@ def assemble_prompt_from_reports(reports: List[Dict[str, Any]], query_projection
     for i, r in enumerate(reports, start=1):
         header = f"--- Example {i} | uid: {r.get('uid')} | projection: {r.get('projection')} | score: {r.get('_score'):.4f} ---"
         ctx_lines.append(header)
-        f = r.get("findings") or ""
-        im = r.get("impression") or ""
+        f = str(r.get("findings") or "")
+        im = str(r.get("impression") or "")
         max_len = 800
-        if len(f) > max_len:
-            f = f[:max_len] + " ... [truncated]"
-        if len(im) > max_len:
-            im = im[:max_len] + " ... [truncated]"
+        print(f"Finidings and Impressions before truncation: {f}  {im}", f, im)
+        try:
+            if len(f) > max_len:
+                f = f[:max_len] + " ... [truncated]"
+            if len(im) > max_len:
+                im = im[:max_len] + " ... [truncated]"
+        except Exception as e:
+            print(f"Error truncating text for report {r.get('uid')}: {e}")
         ctx_lines.append("Findings: " + f)
         ctx_lines.append("Impression: " + im)
         ctx_lines.append("")
@@ -129,6 +165,8 @@ def assemble_prompt_from_reports(reports: List[Dict[str, Any]], query_projection
     #     ctx_lines.append(f"Projection: {query_projection}")
     # ctx_lines.append("Write two sections clearly labeled 'Findings:' and 'Impression:' — be concise and mention uncertainty where appropriate.")
     ctx_lines.append("")
+
+    print("Assembled Prompt Context:")
     return "\n".join(ctx_lines)
 
 # --------------------------
@@ -152,36 +190,28 @@ class SummarizeResponse(BaseModel):
 
 
 # --------------------------
-# Startup: load index, metadata, embedder, generator
+# Startup
 # --------------------------
 def startup_load():
     global FAISS_INDEX, METADATA, EMBEDDER, GEN_TOKENIZER, GEN_MODEL, DEVICE
 
-    # 1) Load metadata
     meta_p = Path(META_PATH)
     if not meta_p.exists():
         raise RuntimeError(f"Metadata file not found at {META_PATH}")
     METADATA = load_metadata_jsonl(META_PATH)
 
-    # 2) Load FAISS index
     idx_p = Path(INDEX_PATH)
     if not idx_p.exists():
         raise RuntimeError(f"FAISS index file not found at {INDEX_PATH}")
     FAISS_INDEX = faiss.read_index(INDEX_PATH)
 
-    # 3) Load MedSigLIP embedder
     EMBEDDER = MedSigLIPEmbedder(MEDSIGLIP_MODEL, DEVICE)
-
-    # # 4) Load generation model & tokenizer (text-only)
-    # GEN_TOKENIZER = AutoTokenizer.from_pretrained(GEN_MODEL_NAME, use_fast=True)
-    # GEN_MODEL = AutoModelForCausalLM.from_pretrained(GEN_MODEL_NAME, trust_remote_code=True).to(DEVICE)
-    # GEN_MODEL.eval()
 
 
 # --------------------------
 # Endpoint: /summarize
 # --------------------------
-def summarize(file: bytes) -> SummarizeResponse:
+def summarize(file: bytes, is_base_retrival = False) -> SummarizeResponse:
     """
     Accept an image file and return retrieved examples + generated Findings/Impression.
     All behavior (k, context size, models, etc.) is hardcoded.
@@ -198,11 +228,15 @@ def summarize(file: bytes) -> SummarizeResponse:
         raise HTTPException(status_code=400, detail=f"Could not read image: {e}")
 
     # 1) Embed
-    q_emb = EMBEDDER.embed_image_pil(pil_img)  # shape (1, D)
+    q_emb = EMBEDDER.embed_image_pil(pil_img)
+
 
     # 2) Retrieve top-k
-    scores, ids = retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
-
+    # scores, ids = retrive_topk_hybrid(q_emb, TOP_K) if is_base_retrival else retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
+    if is_base_retrival:
+        scores, ids = retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
+    else:
+        scores, ids = retrive_topk_hybrid(q_emb, TOP_K)
     # 3) Map ids -> metadata
     results = []
     for rank, (idx, score) in enumerate(zip(ids, scores), start=1):
@@ -210,12 +244,13 @@ def summarize(file: bytes) -> SummarizeResponse:
             continue
         m = METADATA[idx].copy()
         m["_score"] = float(score)
-        # ensure fields exist
         m.setdefault("findings", "")
         m.setdefault("impression", "")
         results.append(m)
 
-    # 4) Compose prompt from top N context reports
+    print(f"✅ Retrieved {len(results)} reports from metadata.")
+
+    # 4) Compose prompt
     top_n = min(MAX_CONTEXT_REPORTS, len(results))
     context_reports = results[:top_n]
     prompt = assemble_prompt_from_reports(context_reports, query_projection=None)
