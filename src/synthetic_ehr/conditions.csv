@@ -1,0 +1,1015 @@
+patient_id,consultation_date,condition_code,condition_description
+P100000,2023-01-29,I50.9,"Heart failure, unspecified"
+P100000,2023-06-27,I50.9,"Heart failure, unspecified"
+P100000,2024-01-31,J18.9,"Pneumonia, unspecified"
+P100000,2024-11-05,J18.9,"Pneumonia, unspecified"
+P100000,2025-01-09,R09.89,Respiratory symptom
+P100000,2025-06-29,R09.89,Respiratory symptom
+P100001,2022-12-04,E11.9,Type 2 diabetes
+P100001,2023-01-07,E11.9,Type 2 diabetes
+P100001,2023-03-04,I10,Hypertension
+P100001,2023-09-01,E11.9,Type 2 diabetes
+P100001,2024-09-11,I50.9,"Heart failure, unspecified"
+P100001,2025-02-23,E11.9,Type 2 diabetes
+P100001,2025-05-01,R09.89,Respiratory symptom
+P100002,2023-06-23,E11.9,Type 2 diabetes
+P100002,2023-11-20,E11.9,Type 2 diabetes
+P100002,2024-01-07,E11.9,Type 2 diabetes
+P100002,2024-07-27,I10,Hypertension
+P100002,2024-10-06,I50.9,"Heart failure, unspecified"
+P100002,2024-10-10,I10,Hypertension
+P100002,2024-11-17,J18.9,"Pneumonia, unspecified"
+P100002,2024-11-22,R09.89,Respiratory symptom
+P100002,2025-03-05,J18.9,"Pneumonia, unspecified"
+P100002,2025-05-14,R09.89,Respiratory symptom
+P100003,2023-05-10,R09.89,Respiratory symptom
+P100003,2023-06-02,R09.89,Respiratory symptom
+P100003,2023-07-15,I10,Hypertension
+P100003,2023-10-27,E11.9,Type 2 diabetes
+P100003,2024-03-09,I10,Hypertension
+P100003,2024-04-15,E11.9,Type 2 diabetes
+P100003,2024-05-14,R09.89,Respiratory symptom
+P100003,2024-11-04,I10,Hypertension
+P100003,2025-04-06,J18.9,"Pneumonia, unspecified"
+P100003,2025-05-25,J18.9,"Pneumonia, unspecified"
+P100003,2025-06-27,I50.9,"Heart failure, unspecified"
+P100003,2025-10-01,I10,Hypertension
+P100003,2025-10-10,I50.9,"Heart failure, unspecified"
+P100004,2022-12-12,J18.9,"Pneumonia, unspecified"
+P100004,2023-01-26,I10,Hypertension
+P100004,2023-04-19,E11.9,Type 2 diabetes
+P100004,2024-04-17,E11.9,Type 2 diabetes
+P100004,2024-08-03,I50.9,"Heart failure, unspecified"
+P100004,2024-08-20,I50.9,"Heart failure, unspecified"
+P100004,2024-10-02,I10,Hypertension
+P100004,2024-12-18,I10,Hypertension
+P100004,2025-01-27,I10,Hypertension
+P100004,2025-02-10,E11.9,Type 2 diabetes
+P100004,2025-10-10,R09.89,Respiratory symptom
+P100005,2022-12-02,J18.9,"Pneumonia, unspecified"
+P100005,2023-01-13,R09.89,Respiratory symptom
+P100005,2023-04-26,I10,Hypertension
+P100005,2023-07-05,R09.89,Respiratory symptom
+P100005,2024-04-14,I50.9,"Heart failure, unspecified"
+P100005,2024-05-17,J18.9,"Pneumonia, unspecified"
+P100005,2024-06-04,I10,Hypertension
+P100005,2025-02-07,I50.9,"Heart failure, unspecified"
+P100005,2025-03-28,E11.9,Type 2 diabetes
+P100005,2025-07-14,R09.89,Respiratory symptom
+P100005,2025-08-27,I10,Hypertension
+P100005,2025-08-29,R09.89,Respiratory symptom
+P100005,2025-09-08,J18.9,"Pneumonia, unspecified"
+P100006,2023-03-20,I10,Hypertension
+P100006,2024-01-06,I10,Hypertension
+P100006,2024-01-16,I10,Hypertension
+P100006,2025-03-15,I50.9,"Heart failure, unspecified"
+P100006,2025-06-22,J18.9,"Pneumonia, unspecified"
+P100006,2025-07-17,R09.89,Respiratory symptom
+P100007,2022-12-24,R09.89,Respiratory symptom
+P100007,2023-01-13,E11.9,Type 2 diabetes
+P100007,2024-04-07,J18.9,"Pneumonia, unspecified"
+P100007,2024-04-14,R09.89,Respiratory symptom
+P100007,2024-05-18,E11.9,Type 2 diabetes
+P100007,2024-06-13,I10,Hypertension
+P100007,2024-09-17,E11.9,Type 2 diabetes
+P100007,2025-03-10,I10,Hypertension
+P100007,2025-05-21,E11.9,Type 2 diabetes
+P100007,2025-06-16,J18.9,"Pneumonia, unspecified"
+P100007,2025-09-15,E11.9,Type 2 diabetes
+P100008,2023-02-16,J18.9,"Pneumonia, unspecified"
+P100008,2023-03-17,E11.9,Type 2 diabetes
+P100008,2024-02-24,R09.89,Respiratory symptom
+P100008,2024-05-19,I10,Hypertension
+P100008,2024-06-03,R09.89,Respiratory symptom
+P100008,2024-07-27,I10,Hypertension
+P100008,2024-12-20,I50.9,"Heart failure, unspecified"
+P100008,2025-03-25,E11.9,Type 2 diabetes
+P100008,2025-06-06,I50.9,"Heart failure, unspecified"
+P100009,2023-04-08,R09.89,Respiratory symptom
+P100009,2023-06-09,E11.9,Type 2 diabetes
+P100009,2023-07-01,E11.9,Type 2 diabetes
+P100009,2023-08-15,E11.9,Type 2 diabetes
+P100009,2023-11-19,E11.9,Type 2 diabetes
+P100009,2023-12-05,R09.89,Respiratory symptom
+P100009,2023-12-20,I10,Hypertension
+P100009,2024-02-20,I10,Hypertension
+P100009,2024-04-03,E11.9,Type 2 diabetes
+P100009,2024-05-10,R09.89,Respiratory symptom
+P100009,2024-05-28,I10,Hypertension
+P100009,2024-05-30,I50.9,"Heart failure, unspecified"
+P100009,2024-12-02,I10,Hypertension
+P100009,2025-04-30,I10,Hypertension
+P100009,2025-10-21,J18.9,"Pneumonia, unspecified"
+P100010,2023-03-19,E11.9,Type 2 diabetes
+P100010,2023-04-13,J18.9,"Pneumonia, unspecified"
+P100010,2023-04-21,J18.9,"Pneumonia, unspecified"
+P100010,2023-06-18,I10,Hypertension
+P100010,2024-04-23,R09.89,Respiratory symptom
+P100010,2024-05-12,I50.9,"Heart failure, unspecified"
+P100010,2024-08-04,J18.9,"Pneumonia, unspecified"
+P100010,2025-01-12,R09.89,Respiratory symptom
+P100010,2025-01-21,R09.89,Respiratory symptom
+P100010,2025-02-12,J18.9,"Pneumonia, unspecified"
+P100010,2025-03-29,E11.9,Type 2 diabetes
+P100010,2025-07-12,J18.9,"Pneumonia, unspecified"
+P100010,2025-10-09,E11.9,Type 2 diabetes
+P100010,2025-10-25,R09.89,Respiratory symptom
+P100011,2022-11-16,I50.9,"Heart failure, unspecified"
+P100011,2023-04-07,J18.9,"Pneumonia, unspecified"
+P100011,2023-08-29,I10,Hypertension
+P100011,2023-09-21,E11.9,Type 2 diabetes
+P100011,2023-10-18,J18.9,"Pneumonia, unspecified"
+P100011,2024-09-25,I50.9,"Heart failure, unspecified"
+P100011,2025-02-24,R09.89,Respiratory symptom
+P100011,2025-04-29,R09.89,Respiratory symptom
+P100011,2025-05-13,I50.9,"Heart failure, unspecified"
+P100011,2025-07-10,J18.9,"Pneumonia, unspecified"
+P100011,2025-10-06,J18.9,"Pneumonia, unspecified"
+P100012,2023-03-23,I50.9,"Heart failure, unspecified"
+P100012,2023-04-13,I50.9,"Heart failure, unspecified"
+P100012,2023-05-11,E11.9,Type 2 diabetes
+P100012,2023-05-31,I10,Hypertension
+P100012,2023-11-15,R09.89,Respiratory symptom
+P100012,2023-11-22,E11.9,Type 2 diabetes
+P100012,2024-01-31,I50.9,"Heart failure, unspecified"
+P100012,2024-08-13,I50.9,"Heart failure, unspecified"
+P100012,2024-12-01,R09.89,Respiratory symptom
+P100013,2022-11-25,E11.9,Type 2 diabetes
+P100013,2023-01-14,J18.9,"Pneumonia, unspecified"
+P100013,2023-03-18,I10,Hypertension
+P100013,2023-08-13,J18.9,"Pneumonia, unspecified"
+P100013,2023-09-02,I50.9,"Heart failure, unspecified"
+P100013,2023-12-29,I50.9,"Heart failure, unspecified"
+P100013,2024-01-14,I50.9,"Heart failure, unspecified"
+P100013,2024-03-07,I10,Hypertension
+P100013,2024-04-05,I10,Hypertension
+P100013,2024-04-16,I50.9,"Heart failure, unspecified"
+P100013,2024-07-09,R09.89,Respiratory symptom
+P100013,2024-07-11,I50.9,"Heart failure, unspecified"
+P100014,2022-11-20,E11.9,Type 2 diabetes
+P100014,2023-04-19,I50.9,"Heart failure, unspecified"
+P100014,2023-06-02,E11.9,Type 2 diabetes
+P100014,2023-07-25,R09.89,Respiratory symptom
+P100014,2023-10-08,R09.89,Respiratory symptom
+P100014,2023-12-10,R09.89,Respiratory symptom
+P100014,2024-01-27,J18.9,"Pneumonia, unspecified"
+P100014,2024-09-29,I10,Hypertension
+P100014,2024-12-16,J18.9,"Pneumonia, unspecified"
+P100014,2025-04-02,I50.9,"Heart failure, unspecified"
+P100014,2025-06-18,I10,Hypertension
+P100014,2025-08-13,I50.9,"Heart failure, unspecified"
+P100014,2025-08-22,R09.89,Respiratory symptom
+P100014,2025-09-28,J18.9,"Pneumonia, unspecified"
+P100015,2023-02-25,E11.9,Type 2 diabetes
+P100015,2023-04-30,I50.9,"Heart failure, unspecified"
+P100015,2023-07-10,E11.9,Type 2 diabetes
+P100015,2023-10-02,I50.9,"Heart failure, unspecified"
+P100015,2024-03-02,I10,Hypertension
+P100015,2024-04-12,I50.9,"Heart failure, unspecified"
+P100015,2024-09-08,I10,Hypertension
+P100015,2025-02-04,J18.9,"Pneumonia, unspecified"
+P100015,2025-07-26,I10,Hypertension
+P100015,2025-08-11,I50.9,"Heart failure, unspecified"
+P100016,2022-11-30,E11.9,Type 2 diabetes
+P100016,2023-02-03,E11.9,Type 2 diabetes
+P100016,2023-04-21,J18.9,"Pneumonia, unspecified"
+P100016,2023-04-25,I50.9,"Heart failure, unspecified"
+P100016,2023-08-01,J18.9,"Pneumonia, unspecified"
+P100016,2024-01-05,E11.9,Type 2 diabetes
+P100016,2024-03-16,I50.9,"Heart failure, unspecified"
+P100016,2024-04-26,E11.9,Type 2 diabetes
+P100016,2024-08-21,R09.89,Respiratory symptom
+P100016,2024-11-28,E11.9,Type 2 diabetes
+P100016,2025-04-07,R09.89,Respiratory symptom
+P100016,2025-08-10,I10,Hypertension
+P100016,2025-08-19,I50.9,"Heart failure, unspecified"
+P100017,2022-11-07,I10,Hypertension
+P100017,2023-01-31,R09.89,Respiratory symptom
+P100017,2023-04-17,I50.9,"Heart failure, unspecified"
+P100017,2023-08-05,I50.9,"Heart failure, unspecified"
+P100017,2024-07-01,I10,Hypertension
+P100017,2024-07-07,E11.9,Type 2 diabetes
+P100017,2024-11-08,J18.9,"Pneumonia, unspecified"
+P100017,2025-01-08,J18.9,"Pneumonia, unspecified"
+P100017,2025-01-17,J18.9,"Pneumonia, unspecified"
+P100017,2025-02-12,I10,Hypertension
+P100017,2025-03-07,I10,Hypertension
+P100017,2025-04-19,I50.9,"Heart failure, unspecified"
+P100017,2025-05-01,I10,Hypertension
+P100017,2025-06-05,R09.89,Respiratory symptom
+P100018,2023-03-06,I50.9,"Heart failure, unspecified"
+P100018,2023-05-18,E11.9,Type 2 diabetes
+P100018,2023-08-05,E11.9,Type 2 diabetes
+P100018,2024-06-04,I10,Hypertension
+P100018,2024-11-29,R09.89,Respiratory symptom
+P100018,2024-12-09,I10,Hypertension
+P100018,2024-12-17,J18.9,"Pneumonia, unspecified"
+P100018,2025-05-13,I10,Hypertension
+P100018,2025-06-10,I10,Hypertension
+P100019,2022-12-21,E11.9,Type 2 diabetes
+P100019,2023-04-10,R09.89,Respiratory symptom
+P100019,2023-08-24,R09.89,Respiratory symptom
+P100019,2023-10-03,E11.9,Type 2 diabetes
+P100019,2023-10-19,I50.9,"Heart failure, unspecified"
+P100019,2023-12-25,R09.89,Respiratory symptom
+P100019,2024-04-13,J18.9,"Pneumonia, unspecified"
+P100019,2024-05-11,E11.9,Type 2 diabetes
+P100019,2024-09-30,J18.9,"Pneumonia, unspecified"
+P100019,2024-11-01,I50.9,"Heart failure, unspecified"
+P100019,2024-11-27,E11.9,Type 2 diabetes
+P100019,2025-01-19,I10,Hypertension
+P100019,2025-04-23,I10,Hypertension
+P100019,2025-09-09,I10,Hypertension
+P100020,2023-02-03,E11.9,Type 2 diabetes
+P100020,2023-02-09,E11.9,Type 2 diabetes
+P100020,2023-03-03,R09.89,Respiratory symptom
+P100020,2023-03-21,R09.89,Respiratory symptom
+P100020,2023-06-11,J18.9,"Pneumonia, unspecified"
+P100020,2023-08-31,J18.9,"Pneumonia, unspecified"
+P100020,2023-12-19,E11.9,Type 2 diabetes
+P100020,2024-01-05,I10,Hypertension
+P100020,2024-02-15,E11.9,Type 2 diabetes
+P100020,2024-10-04,J18.9,"Pneumonia, unspecified"
+P100020,2024-12-04,J18.9,"Pneumonia, unspecified"
+P100020,2025-02-24,R09.89,Respiratory symptom
+P100020,2025-04-19,E11.9,Type 2 diabetes
+P100020,2025-08-10,E11.9,Type 2 diabetes
+P100020,2025-10-06,E11.9,Type 2 diabetes
+P100021,2022-12-20,J18.9,"Pneumonia, unspecified"
+P100021,2023-04-25,J18.9,"Pneumonia, unspecified"
+P100021,2023-12-26,I50.9,"Heart failure, unspecified"
+P100021,2024-04-04,I10,Hypertension
+P100021,2024-04-15,R09.89,Respiratory symptom
+P100021,2024-09-10,R09.89,Respiratory symptom
+P100021,2025-04-07,R09.89,Respiratory symptom
+P100021,2025-05-02,I10,Hypertension
+P100021,2025-08-24,I10,Hypertension
+P100021,2025-09-19,I50.9,"Heart failure, unspecified"
+P100022,2023-04-08,E11.9,Type 2 diabetes
+P100022,2023-06-23,E11.9,Type 2 diabetes
+P100022,2023-08-19,I50.9,"Heart failure, unspecified"
+P100022,2023-10-12,J18.9,"Pneumonia, unspecified"
+P100022,2024-07-01,J18.9,"Pneumonia, unspecified"
+P100022,2024-07-07,I50.9,"Heart failure, unspecified"
+P100022,2024-07-12,I50.9,"Heart failure, unspecified"
+P100022,2024-09-23,R09.89,Respiratory symptom
+P100022,2024-09-24,R09.89,Respiratory symptom
+P100022,2024-10-11,E11.9,Type 2 diabetes
+P100022,2025-06-03,I10,Hypertension
+P100022,2025-08-17,J18.9,"Pneumonia, unspecified"
+P100022,2025-09-12,E11.9,Type 2 diabetes
+P100022,2025-10-08,I10,Hypertension
+P100022,2025-10-08,I50.9,"Heart failure, unspecified"
+P100023,2022-11-28,R09.89,Respiratory symptom
+P100023,2023-02-13,E11.9,Type 2 diabetes
+P100023,2023-04-04,I10,Hypertension
+P100023,2023-05-14,I50.9,"Heart failure, unspecified"
+P100023,2023-06-04,I50.9,"Heart failure, unspecified"
+P100023,2025-02-02,I50.9,"Heart failure, unspecified"
+P100024,2022-11-19,E11.9,Type 2 diabetes
+P100024,2022-11-28,I50.9,"Heart failure, unspecified"
+P100024,2023-02-17,I50.9,"Heart failure, unspecified"
+P100024,2023-04-01,I50.9,"Heart failure, unspecified"
+P100024,2023-05-07,E11.9,Type 2 diabetes
+P100024,2023-08-01,I50.9,"Heart failure, unspecified"
+P100024,2023-08-30,I50.9,"Heart failure, unspecified"
+P100024,2023-11-01,E11.9,Type 2 diabetes
+P100024,2023-12-12,J18.9,"Pneumonia, unspecified"
+P100024,2024-02-10,I50.9,"Heart failure, unspecified"
+P100024,2024-04-01,J18.9,"Pneumonia, unspecified"
+P100024,2024-10-30,J18.9,"Pneumonia, unspecified"
+P100024,2025-03-05,R09.89,Respiratory symptom
+P100024,2025-05-04,J18.9,"Pneumonia, unspecified"
+P100024,2025-07-11,J18.9,"Pneumonia, unspecified"
+P100025,2023-06-09,I50.9,"Heart failure, unspecified"
+P100025,2023-09-29,E11.9,Type 2 diabetes
+P100025,2023-12-19,I50.9,"Heart failure, unspecified"
+P100025,2024-03-22,I10,Hypertension
+P100025,2024-05-01,E11.9,Type 2 diabetes
+P100025,2024-06-07,R09.89,Respiratory symptom
+P100025,2024-06-08,J18.9,"Pneumonia, unspecified"
+P100025,2024-06-12,E11.9,Type 2 diabetes
+P100025,2024-07-08,I10,Hypertension
+P100025,2024-08-07,I10,Hypertension
+P100025,2024-11-09,R09.89,Respiratory symptom
+P100025,2025-03-02,I10,Hypertension
+P100025,2025-08-24,R09.89,Respiratory symptom
+P100025,2025-08-31,E11.9,Type 2 diabetes
+P100025,2025-10-06,I50.9,"Heart failure, unspecified"
+P100026,2023-06-29,I10,Hypertension
+P100026,2023-09-25,I10,Hypertension
+P100026,2023-09-28,I50.9,"Heart failure, unspecified"
+P100026,2024-09-16,I50.9,"Heart failure, unspecified"
+P100026,2025-04-04,I10,Hypertension
+P100026,2025-07-26,I10,Hypertension
+P100026,2025-10-07,I50.9,"Heart failure, unspecified"
+P100027,2022-11-21,R09.89,Respiratory symptom
+P100027,2022-11-28,E11.9,Type 2 diabetes
+P100027,2023-04-09,R09.89,Respiratory symptom
+P100027,2023-04-16,I50.9,"Heart failure, unspecified"
+P100027,2023-08-23,R09.89,Respiratory symptom
+P100027,2023-10-02,R09.89,Respiratory symptom
+P100027,2023-11-01,E11.9,Type 2 diabetes
+P100027,2023-11-26,I50.9,"Heart failure, unspecified"
+P100027,2024-08-21,J18.9,"Pneumonia, unspecified"
+P100027,2024-08-23,I10,Hypertension
+P100027,2025-03-06,I10,Hypertension
+P100027,2025-06-22,R09.89,Respiratory symptom
+P100027,2025-07-25,E11.9,Type 2 diabetes
+P100027,2025-07-28,E11.9,Type 2 diabetes
+P100027,2025-09-11,I50.9,"Heart failure, unspecified"
+P100028,2022-12-30,E11.9,Type 2 diabetes
+P100028,2023-02-06,I50.9,"Heart failure, unspecified"
+P100028,2023-06-17,R09.89,Respiratory symptom
+P100028,2023-06-26,I10,Hypertension
+P100028,2023-11-06,I10,Hypertension
+P100029,2023-02-22,E11.9,Type 2 diabetes
+P100029,2023-05-16,I50.9,"Heart failure, unspecified"
+P100029,2023-06-30,E11.9,Type 2 diabetes
+P100029,2023-09-23,R09.89,Respiratory symptom
+P100029,2023-10-13,R09.89,Respiratory symptom
+P100029,2023-10-26,I50.9,"Heart failure, unspecified"
+P100029,2024-07-15,R09.89,Respiratory symptom
+P100029,2025-08-25,I50.9,"Heart failure, unspecified"
+P100030,2023-02-25,R09.89,Respiratory symptom
+P100030,2024-05-31,I10,Hypertension
+P100030,2025-02-02,I10,Hypertension
+P100030,2025-04-29,I10,Hypertension
+P100030,2025-09-21,E11.9,Type 2 diabetes
+P100031,2022-10-27,E11.9,Type 2 diabetes
+P100031,2022-10-29,J18.9,"Pneumonia, unspecified"
+P100031,2023-05-07,I50.9,"Heart failure, unspecified"
+P100031,2023-11-25,R09.89,Respiratory symptom
+P100031,2024-02-10,J18.9,"Pneumonia, unspecified"
+P100031,2024-06-22,J18.9,"Pneumonia, unspecified"
+P100031,2024-06-27,R09.89,Respiratory symptom
+P100031,2025-01-20,I50.9,"Heart failure, unspecified"
+P100031,2025-04-15,I50.9,"Heart failure, unspecified"
+P100031,2025-07-28,I10,Hypertension
+P100031,2025-07-29,R09.89,Respiratory symptom
+P100032,2023-03-07,R09.89,Respiratory symptom
+P100032,2023-03-18,I10,Hypertension
+P100032,2024-04-23,J18.9,"Pneumonia, unspecified"
+P100032,2024-06-17,J18.9,"Pneumonia, unspecified"
+P100032,2024-11-15,I10,Hypertension
+P100032,2025-05-06,I10,Hypertension
+P100033,2022-10-29,R09.89,Respiratory symptom
+P100033,2022-12-08,E11.9,Type 2 diabetes
+P100033,2023-05-12,J18.9,"Pneumonia, unspecified"
+P100033,2023-07-11,I10,Hypertension
+P100033,2023-12-02,I10,Hypertension
+P100034,2022-12-05,E11.9,Type 2 diabetes
+P100034,2022-12-31,I50.9,"Heart failure, unspecified"
+P100034,2023-08-07,R09.89,Respiratory symptom
+P100034,2023-08-12,J18.9,"Pneumonia, unspecified"
+P100034,2023-10-20,J18.9,"Pneumonia, unspecified"
+P100034,2023-10-25,I50.9,"Heart failure, unspecified"
+P100034,2023-11-01,I10,Hypertension
+P100034,2024-12-15,E11.9,Type 2 diabetes
+P100034,2025-04-14,J18.9,"Pneumonia, unspecified"
+P100034,2025-05-26,J18.9,"Pneumonia, unspecified"
+P100034,2025-07-27,I50.9,"Heart failure, unspecified"
+P100035,2023-02-12,J18.9,"Pneumonia, unspecified"
+P100035,2023-03-12,E11.9,Type 2 diabetes
+P100035,2023-06-09,R09.89,Respiratory symptom
+P100035,2023-06-26,I10,Hypertension
+P100035,2023-09-22,E11.9,Type 2 diabetes
+P100035,2023-12-05,I50.9,"Heart failure, unspecified"
+P100035,2024-03-22,I50.9,"Heart failure, unspecified"
+P100035,2024-07-23,R09.89,Respiratory symptom
+P100035,2025-04-18,E11.9,Type 2 diabetes
+P100035,2025-10-03,J18.9,"Pneumonia, unspecified"
+P100036,2022-11-17,E11.9,Type 2 diabetes
+P100036,2022-12-19,J18.9,"Pneumonia, unspecified"
+P100036,2023-05-19,I10,Hypertension
+P100036,2024-02-02,J18.9,"Pneumonia, unspecified"
+P100036,2024-02-17,E11.9,Type 2 diabetes
+P100036,2024-03-17,R09.89,Respiratory symptom
+P100036,2024-03-26,R09.89,Respiratory symptom
+P100036,2024-08-09,R09.89,Respiratory symptom
+P100036,2024-11-08,I10,Hypertension
+P100036,2024-11-22,E11.9,Type 2 diabetes
+P100036,2024-12-16,E11.9,Type 2 diabetes
+P100036,2024-12-28,R09.89,Respiratory symptom
+P100036,2025-03-28,I50.9,"Heart failure, unspecified"
+P100036,2025-09-02,E11.9,Type 2 diabetes
+P100037,2022-12-28,R09.89,Respiratory symptom
+P100037,2023-01-08,I50.9,"Heart failure, unspecified"
+P100037,2023-07-20,I10,Hypertension
+P100037,2023-08-01,I10,Hypertension
+P100037,2023-09-01,E11.9,Type 2 diabetes
+P100037,2023-11-07,I50.9,"Heart failure, unspecified"
+P100037,2023-12-21,I50.9,"Heart failure, unspecified"
+P100037,2024-01-27,I10,Hypertension
+P100037,2024-01-31,I50.9,"Heart failure, unspecified"
+P100037,2024-04-23,R09.89,Respiratory symptom
+P100037,2024-08-09,E11.9,Type 2 diabetes
+P100037,2025-01-14,E11.9,Type 2 diabetes
+P100037,2025-06-11,I50.9,"Heart failure, unspecified"
+P100037,2025-06-12,R09.89,Respiratory symptom
+P100037,2025-06-21,R09.89,Respiratory symptom
+P100038,2022-11-04,I10,Hypertension
+P100038,2022-12-02,E11.9,Type 2 diabetes
+P100038,2023-10-28,I50.9,"Heart failure, unspecified"
+P100038,2024-07-30,J18.9,"Pneumonia, unspecified"
+P100038,2024-08-31,I10,Hypertension
+P100038,2024-09-01,R09.89,Respiratory symptom
+P100038,2024-10-22,J18.9,"Pneumonia, unspecified"
+P100038,2025-02-06,I50.9,"Heart failure, unspecified"
+P100039,2023-07-06,I10,Hypertension
+P100039,2023-11-29,E11.9,Type 2 diabetes
+P100039,2024-03-17,J18.9,"Pneumonia, unspecified"
+P100039,2024-07-22,I10,Hypertension
+P100039,2025-02-05,I50.9,"Heart failure, unspecified"
+P100039,2025-06-29,I50.9,"Heart failure, unspecified"
+P100040,2022-11-26,I50.9,"Heart failure, unspecified"
+P100040,2022-12-12,I10,Hypertension
+P100040,2023-11-04,I10,Hypertension
+P100040,2023-11-12,I50.9,"Heart failure, unspecified"
+P100040,2023-11-26,I50.9,"Heart failure, unspecified"
+P100040,2024-01-12,J18.9,"Pneumonia, unspecified"
+P100040,2024-03-07,R09.89,Respiratory symptom
+P100040,2024-04-15,R09.89,Respiratory symptom
+P100040,2024-06-08,I10,Hypertension
+P100040,2024-06-25,J18.9,"Pneumonia, unspecified"
+P100040,2024-09-16,J18.9,"Pneumonia, unspecified"
+P100040,2025-01-31,R09.89,Respiratory symptom
+P100040,2025-02-08,R09.89,Respiratory symptom
+P100041,2022-12-17,J18.9,"Pneumonia, unspecified"
+P100041,2023-03-08,I10,Hypertension
+P100041,2023-03-19,R09.89,Respiratory symptom
+P100041,2023-12-04,J18.9,"Pneumonia, unspecified"
+P100041,2024-03-15,E11.9,Type 2 diabetes
+P100041,2024-05-16,E11.9,Type 2 diabetes
+P100041,2024-11-16,E11.9,Type 2 diabetes
+P100041,2024-11-26,I10,Hypertension
+P100041,2025-03-20,E11.9,Type 2 diabetes
+P100041,2025-08-22,J18.9,"Pneumonia, unspecified"
+P100042,2023-01-22,R09.89,Respiratory symptom
+P100042,2024-03-06,R09.89,Respiratory symptom
+P100042,2024-03-20,R09.89,Respiratory symptom
+P100042,2024-05-04,R09.89,Respiratory symptom
+P100042,2024-08-11,R09.89,Respiratory symptom
+P100043,2023-04-15,I50.9,"Heart failure, unspecified"
+P100043,2024-01-12,E11.9,Type 2 diabetes
+P100043,2024-03-21,R09.89,Respiratory symptom
+P100043,2024-07-17,J18.9,"Pneumonia, unspecified"
+P100043,2024-08-14,J18.9,"Pneumonia, unspecified"
+P100043,2024-10-22,I50.9,"Heart failure, unspecified"
+P100043,2025-02-24,E11.9,Type 2 diabetes
+P100043,2025-07-11,I50.9,"Heart failure, unspecified"
+P100044,2023-02-24,I10,Hypertension
+P100044,2023-05-15,J18.9,"Pneumonia, unspecified"
+P100044,2023-06-18,E11.9,Type 2 diabetes
+P100044,2023-09-14,J18.9,"Pneumonia, unspecified"
+P100044,2023-12-11,I10,Hypertension
+P100044,2023-12-27,E11.9,Type 2 diabetes
+P100044,2024-05-24,R09.89,Respiratory symptom
+P100044,2025-04-20,I10,Hypertension
+P100044,2025-07-29,J18.9,"Pneumonia, unspecified"
+P100044,2025-08-03,R09.89,Respiratory symptom
+P100044,2025-09-24,R09.89,Respiratory symptom
+P100045,2022-11-25,R09.89,Respiratory symptom
+P100045,2023-06-23,R09.89,Respiratory symptom
+P100045,2023-10-30,I50.9,"Heart failure, unspecified"
+P100045,2024-01-11,I50.9,"Heart failure, unspecified"
+P100045,2024-05-19,I50.9,"Heart failure, unspecified"
+P100045,2025-03-09,R09.89,Respiratory symptom
+P100045,2025-08-25,I10,Hypertension
+P100046,2023-02-27,I10,Hypertension
+P100046,2023-04-08,R09.89,Respiratory symptom
+P100046,2023-04-12,E11.9,Type 2 diabetes
+P100046,2023-05-09,R09.89,Respiratory symptom
+P100046,2023-10-03,J18.9,"Pneumonia, unspecified"
+P100046,2023-12-27,I10,Hypertension
+P100046,2024-02-14,J18.9,"Pneumonia, unspecified"
+P100046,2024-03-09,I50.9,"Heart failure, unspecified"
+P100046,2024-08-26,I10,Hypertension
+P100046,2025-01-03,I50.9,"Heart failure, unspecified"
+P100046,2025-08-08,R09.89,Respiratory symptom
+P100047,2023-07-14,I50.9,"Heart failure, unspecified"
+P100047,2023-09-09,J18.9,"Pneumonia, unspecified"
+P100047,2024-03-22,J18.9,"Pneumonia, unspecified"
+P100047,2024-05-24,I10,Hypertension
+P100047,2024-08-23,R09.89,Respiratory symptom
+P100047,2024-10-23,I50.9,"Heart failure, unspecified"
+P100047,2024-11-19,J18.9,"Pneumonia, unspecified"
+P100047,2024-11-21,E11.9,Type 2 diabetes
+P100047,2024-12-13,R09.89,Respiratory symptom
+P100047,2025-03-15,I50.9,"Heart failure, unspecified"
+P100047,2025-10-06,I10,Hypertension
+P100048,2023-07-19,I10,Hypertension
+P100048,2023-09-26,J18.9,"Pneumonia, unspecified"
+P100048,2023-12-31,I10,Hypertension
+P100048,2024-01-13,R09.89,Respiratory symptom
+P100048,2024-04-18,J18.9,"Pneumonia, unspecified"
+P100048,2024-05-07,R09.89,Respiratory symptom
+P100048,2024-07-21,R09.89,Respiratory symptom
+P100048,2024-10-25,I50.9,"Heart failure, unspecified"
+P100048,2025-01-16,R09.89,Respiratory symptom
+P100048,2025-02-23,R09.89,Respiratory symptom
+P100048,2025-06-21,I10,Hypertension
+P100048,2025-07-14,I50.9,"Heart failure, unspecified"
+P100049,2023-03-07,R09.89,Respiratory symptom
+P100049,2023-06-05,J18.9,"Pneumonia, unspecified"
+P100049,2023-06-13,J18.9,"Pneumonia, unspecified"
+P100049,2023-11-20,J18.9,"Pneumonia, unspecified"
+P100049,2023-12-30,J18.9,"Pneumonia, unspecified"
+P100049,2024-01-02,I50.9,"Heart failure, unspecified"
+P100049,2024-01-14,I10,Hypertension
+P100049,2024-04-08,I10,Hypertension
+P100049,2024-05-29,E11.9,Type 2 diabetes
+P100049,2024-06-23,I10,Hypertension
+P100049,2024-09-24,R09.89,Respiratory symptom
+P100049,2024-12-07,I10,Hypertension
+P100049,2024-12-23,J18.9,"Pneumonia, unspecified"
+P100049,2025-06-15,I50.9,"Heart failure, unspecified"
+P100050,2023-09-11,I10,Hypertension
+P100050,2024-12-07,E11.9,Type 2 diabetes
+P100050,2024-12-14,J18.9,"Pneumonia, unspecified"
+P100050,2025-05-09,I50.9,"Heart failure, unspecified"
+P100050,2025-06-17,I50.9,"Heart failure, unspecified"
+P100050,2025-08-28,I10,Hypertension
+P100051,2023-03-22,I50.9,"Heart failure, unspecified"
+P100051,2023-07-27,J18.9,"Pneumonia, unspecified"
+P100051,2024-02-23,E11.9,Type 2 diabetes
+P100051,2024-06-17,E11.9,Type 2 diabetes
+P100051,2024-07-22,E11.9,Type 2 diabetes
+P100051,2024-08-14,I10,Hypertension
+P100052,2023-05-05,J18.9,"Pneumonia, unspecified"
+P100052,2023-06-21,R09.89,Respiratory symptom
+P100052,2023-08-28,I50.9,"Heart failure, unspecified"
+P100052,2023-09-26,I50.9,"Heart failure, unspecified"
+P100052,2023-10-10,I50.9,"Heart failure, unspecified"
+P100052,2024-02-03,J18.9,"Pneumonia, unspecified"
+P100052,2024-02-26,E11.9,Type 2 diabetes
+P100052,2024-05-13,R09.89,Respiratory symptom
+P100052,2024-05-28,R09.89,Respiratory symptom
+P100052,2024-07-15,J18.9,"Pneumonia, unspecified"
+P100052,2024-08-25,I10,Hypertension
+P100052,2024-09-02,E11.9,Type 2 diabetes
+P100052,2024-10-08,E11.9,Type 2 diabetes
+P100052,2024-11-02,R09.89,Respiratory symptom
+P100052,2025-02-13,J18.9,"Pneumonia, unspecified"
+P100053,2023-01-09,J18.9,"Pneumonia, unspecified"
+P100053,2023-02-10,E11.9,Type 2 diabetes
+P100053,2023-02-25,R09.89,Respiratory symptom
+P100053,2023-07-10,I10,Hypertension
+P100053,2023-11-07,I50.9,"Heart failure, unspecified"
+P100053,2024-05-07,J18.9,"Pneumonia, unspecified"
+P100053,2025-02-01,I50.9,"Heart failure, unspecified"
+P100054,2022-11-04,R09.89,Respiratory symptom
+P100054,2023-01-04,E11.9,Type 2 diabetes
+P100054,2023-03-02,J18.9,"Pneumonia, unspecified"
+P100054,2023-03-16,J18.9,"Pneumonia, unspecified"
+P100054,2023-06-16,J18.9,"Pneumonia, unspecified"
+P100054,2024-03-07,E11.9,Type 2 diabetes
+P100054,2024-05-20,J18.9,"Pneumonia, unspecified"
+P100055,2023-02-22,J18.9,"Pneumonia, unspecified"
+P100055,2023-02-25,I10,Hypertension
+P100055,2023-05-09,J18.9,"Pneumonia, unspecified"
+P100055,2023-08-06,I10,Hypertension
+P100055,2023-11-25,I50.9,"Heart failure, unspecified"
+P100055,2023-12-26,J18.9,"Pneumonia, unspecified"
+P100055,2024-01-17,I50.9,"Heart failure, unspecified"
+P100055,2024-04-02,I50.9,"Heart failure, unspecified"
+P100055,2024-04-04,J18.9,"Pneumonia, unspecified"
+P100055,2024-04-18,J18.9,"Pneumonia, unspecified"
+P100055,2024-04-25,I50.9,"Heart failure, unspecified"
+P100055,2024-05-30,I10,Hypertension
+P100055,2024-08-25,I50.9,"Heart failure, unspecified"
+P100055,2025-07-17,I10,Hypertension
+P100055,2025-10-23,R09.89,Respiratory symptom
+P100056,2023-02-28,J18.9,"Pneumonia, unspecified"
+P100056,2023-06-25,I10,Hypertension
+P100056,2023-12-22,J18.9,"Pneumonia, unspecified"
+P100056,2024-01-23,I50.9,"Heart failure, unspecified"
+P100056,2024-02-14,E11.9,Type 2 diabetes
+P100056,2024-06-17,R09.89,Respiratory symptom
+P100056,2024-06-25,E11.9,Type 2 diabetes
+P100056,2024-10-28,I10,Hypertension
+P100056,2024-12-22,I10,Hypertension
+P100056,2025-01-01,I10,Hypertension
+P100056,2025-01-23,I50.9,"Heart failure, unspecified"
+P100056,2025-03-17,E11.9,Type 2 diabetes
+P100056,2025-05-20,E11.9,Type 2 diabetes
+P100056,2025-08-24,E11.9,Type 2 diabetes
+P100057,2023-04-11,E11.9,Type 2 diabetes
+P100057,2023-08-20,I10,Hypertension
+P100057,2023-12-11,J18.9,"Pneumonia, unspecified"
+P100057,2024-06-10,R09.89,Respiratory symptom
+P100057,2025-05-14,I10,Hypertension
+P100057,2025-10-24,I50.9,"Heart failure, unspecified"
+P100058,2023-05-15,J18.9,"Pneumonia, unspecified"
+P100058,2023-07-31,E11.9,Type 2 diabetes
+P100058,2023-09-30,E11.9,Type 2 diabetes
+P100058,2023-10-21,I50.9,"Heart failure, unspecified"
+P100058,2023-11-23,J18.9,"Pneumonia, unspecified"
+P100058,2024-01-17,I10,Hypertension
+P100058,2024-09-02,I50.9,"Heart failure, unspecified"
+P100058,2024-11-14,R09.89,Respiratory symptom
+P100058,2024-12-24,E11.9,Type 2 diabetes
+P100058,2025-04-02,R09.89,Respiratory symptom
+P100058,2025-08-15,I50.9,"Heart failure, unspecified"
+P100058,2025-09-04,I50.9,"Heart failure, unspecified"
+P100058,2025-10-02,E11.9,Type 2 diabetes
+P100059,2022-10-30,I10,Hypertension
+P100059,2022-12-21,J18.9,"Pneumonia, unspecified"
+P100059,2023-04-22,I10,Hypertension
+P100059,2023-05-20,J18.9,"Pneumonia, unspecified"
+P100059,2024-04-19,E11.9,Type 2 diabetes
+P100059,2024-08-18,J18.9,"Pneumonia, unspecified"
+P100059,2024-09-25,J18.9,"Pneumonia, unspecified"
+P100060,2022-12-11,E11.9,Type 2 diabetes
+P100060,2023-03-07,J18.9,"Pneumonia, unspecified"
+P100060,2023-05-22,I50.9,"Heart failure, unspecified"
+P100060,2023-09-17,R09.89,Respiratory symptom
+P100060,2023-10-28,E11.9,Type 2 diabetes
+P100060,2024-06-15,I10,Hypertension
+P100060,2024-09-15,R09.89,Respiratory symptom
+P100060,2025-03-30,J18.9,"Pneumonia, unspecified"
+P100060,2025-08-11,E11.9,Type 2 diabetes
+P100060,2025-08-15,I10,Hypertension
+P100060,2025-09-13,J18.9,"Pneumonia, unspecified"
+P100061,2022-11-06,E11.9,Type 2 diabetes
+P100061,2023-02-28,R09.89,Respiratory symptom
+P100061,2023-03-31,J18.9,"Pneumonia, unspecified"
+P100061,2023-05-20,I10,Hypertension
+P100061,2023-06-06,E11.9,Type 2 diabetes
+P100061,2024-08-29,E11.9,Type 2 diabetes
+P100061,2025-02-17,I10,Hypertension
+P100061,2025-02-20,R09.89,Respiratory symptom
+P100062,2023-01-02,R09.89,Respiratory symptom
+P100062,2023-01-24,I10,Hypertension
+P100062,2023-02-25,J18.9,"Pneumonia, unspecified"
+P100062,2023-07-10,J18.9,"Pneumonia, unspecified"
+P100062,2023-07-12,I10,Hypertension
+P100062,2023-07-16,I10,Hypertension
+P100062,2024-02-10,I10,Hypertension
+P100062,2024-05-21,J18.9,"Pneumonia, unspecified"
+P100062,2024-06-18,J18.9,"Pneumonia, unspecified"
+P100062,2025-03-10,I10,Hypertension
+P100062,2025-07-15,J18.9,"Pneumonia, unspecified"
+P100062,2025-08-27,I10,Hypertension
+P100063,2022-11-18,R09.89,Respiratory symptom
+P100063,2023-04-29,E11.9,Type 2 diabetes
+P100063,2023-06-30,I50.9,"Heart failure, unspecified"
+P100063,2023-12-03,I50.9,"Heart failure, unspecified"
+P100063,2024-01-29,R09.89,Respiratory symptom
+P100063,2024-04-24,I50.9,"Heart failure, unspecified"
+P100063,2024-06-05,E11.9,Type 2 diabetes
+P100063,2024-07-13,I10,Hypertension
+P100063,2024-10-24,R09.89,Respiratory symptom
+P100063,2025-03-27,R09.89,Respiratory symptom
+P100064,2022-11-04,I50.9,"Heart failure, unspecified"
+P100064,2023-01-05,R09.89,Respiratory symptom
+P100064,2023-02-02,I50.9,"Heart failure, unspecified"
+P100064,2023-02-22,E11.9,Type 2 diabetes
+P100064,2023-03-09,E11.9,Type 2 diabetes
+P100064,2023-06-15,I10,Hypertension
+P100064,2023-11-14,R09.89,Respiratory symptom
+P100064,2024-02-11,E11.9,Type 2 diabetes
+P100064,2024-03-18,I10,Hypertension
+P100064,2024-06-27,I10,Hypertension
+P100064,2024-11-17,E11.9,Type 2 diabetes
+P100064,2025-02-18,I50.9,"Heart failure, unspecified"
+P100064,2025-05-04,I50.9,"Heart failure, unspecified"
+P100064,2025-08-31,J18.9,"Pneumonia, unspecified"
+P100065,2023-01-10,R09.89,Respiratory symptom
+P100065,2023-01-14,I10,Hypertension
+P100065,2023-02-28,J18.9,"Pneumonia, unspecified"
+P100065,2023-07-28,I50.9,"Heart failure, unspecified"
+P100065,2023-10-31,R09.89,Respiratory symptom
+P100065,2023-11-02,E11.9,Type 2 diabetes
+P100065,2023-11-24,E11.9,Type 2 diabetes
+P100065,2024-03-15,I50.9,"Heart failure, unspecified"
+P100065,2024-06-02,E11.9,Type 2 diabetes
+P100065,2024-12-25,I50.9,"Heart failure, unspecified"
+P100065,2025-03-02,J18.9,"Pneumonia, unspecified"
+P100065,2025-04-28,J18.9,"Pneumonia, unspecified"
+P100065,2025-06-01,E11.9,Type 2 diabetes
+P100066,2022-10-28,I50.9,"Heart failure, unspecified"
+P100066,2023-01-27,I50.9,"Heart failure, unspecified"
+P100066,2023-07-29,J18.9,"Pneumonia, unspecified"
+P100066,2023-09-01,I50.9,"Heart failure, unspecified"
+P100066,2024-07-06,I50.9,"Heart failure, unspecified"
+P100066,2024-09-23,J18.9,"Pneumonia, unspecified"
+P100066,2024-09-28,I50.9,"Heart failure, unspecified"
+P100066,2025-03-24,I50.9,"Heart failure, unspecified"
+P100066,2025-10-24,J18.9,"Pneumonia, unspecified"
+P100067,2023-09-01,I10,Hypertension
+P100067,2023-09-05,I10,Hypertension
+P100067,2023-09-13,E11.9,Type 2 diabetes
+P100067,2023-11-11,R09.89,Respiratory symptom
+P100067,2024-01-25,I10,Hypertension
+P100067,2024-02-27,I10,Hypertension
+P100067,2024-03-10,I10,Hypertension
+P100067,2024-04-29,I10,Hypertension
+P100067,2024-06-28,R09.89,Respiratory symptom
+P100067,2024-12-15,J18.9,"Pneumonia, unspecified"
+P100067,2024-12-25,J18.9,"Pneumonia, unspecified"
+P100067,2025-02-10,I50.9,"Heart failure, unspecified"
+P100067,2025-02-24,J18.9,"Pneumonia, unspecified"
+P100067,2025-08-08,J18.9,"Pneumonia, unspecified"
+P100067,2025-09-04,J18.9,"Pneumonia, unspecified"
+P100068,2022-11-04,E11.9,Type 2 diabetes
+P100068,2022-11-16,I10,Hypertension
+P100068,2023-04-10,I50.9,"Heart failure, unspecified"
+P100068,2023-11-03,J18.9,"Pneumonia, unspecified"
+P100068,2024-02-18,R09.89,Respiratory symptom
+P100068,2024-04-09,I50.9,"Heart failure, unspecified"
+P100068,2024-04-22,J18.9,"Pneumonia, unspecified"
+P100068,2024-10-06,J18.9,"Pneumonia, unspecified"
+P100068,2025-07-24,R09.89,Respiratory symptom
+P100068,2025-08-21,I10,Hypertension
+P100068,2025-10-20,R09.89,Respiratory symptom
+P100069,2023-01-27,E11.9,Type 2 diabetes
+P100069,2023-01-31,E11.9,Type 2 diabetes
+P100069,2023-10-14,I10,Hypertension
+P100069,2023-11-06,E11.9,Type 2 diabetes
+P100069,2024-01-11,I10,Hypertension
+P100069,2024-02-13,I50.9,"Heart failure, unspecified"
+P100069,2025-01-24,E11.9,Type 2 diabetes
+P100069,2025-07-18,I50.9,"Heart failure, unspecified"
+P100069,2025-07-30,E11.9,Type 2 diabetes
+P100070,2023-04-07,E11.9,Type 2 diabetes
+P100070,2023-09-01,R09.89,Respiratory symptom
+P100070,2024-02-10,I10,Hypertension
+P100070,2025-07-26,I10,Hypertension
+P100070,2025-08-15,E11.9,Type 2 diabetes
+P100071,2023-03-01,E11.9,Type 2 diabetes
+P100071,2023-03-07,I50.9,"Heart failure, unspecified"
+P100071,2023-04-28,I10,Hypertension
+P100071,2023-08-07,J18.9,"Pneumonia, unspecified"
+P100071,2023-10-02,R09.89,Respiratory symptom
+P100071,2024-03-12,I10,Hypertension
+P100071,2024-04-22,I50.9,"Heart failure, unspecified"
+P100071,2024-05-24,I50.9,"Heart failure, unspecified"
+P100071,2024-11-03,R09.89,Respiratory symptom
+P100071,2024-12-26,E11.9,Type 2 diabetes
+P100071,2025-01-23,E11.9,Type 2 diabetes
+P100071,2025-02-22,R09.89,Respiratory symptom
+P100071,2025-03-31,E11.9,Type 2 diabetes
+P100071,2025-08-13,E11.9,Type 2 diabetes
+P100072,2023-05-03,R09.89,Respiratory symptom
+P100072,2023-08-07,R09.89,Respiratory symptom
+P100072,2023-08-28,I50.9,"Heart failure, unspecified"
+P100072,2023-10-08,I10,Hypertension
+P100072,2023-11-11,I50.9,"Heart failure, unspecified"
+P100072,2024-02-11,J18.9,"Pneumonia, unspecified"
+P100072,2024-06-28,I50.9,"Heart failure, unspecified"
+P100072,2025-09-16,I10,Hypertension
+P100072,2025-09-27,I10,Hypertension
+P100072,2025-10-24,I50.9,"Heart failure, unspecified"
+P100073,2023-03-17,E11.9,Type 2 diabetes
+P100073,2023-03-28,E11.9,Type 2 diabetes
+P100073,2023-05-24,E11.9,Type 2 diabetes
+P100073,2023-06-05,I10,Hypertension
+P100073,2024-08-15,J18.9,"Pneumonia, unspecified"
+P100073,2024-10-09,R09.89,Respiratory symptom
+P100073,2025-02-26,E11.9,Type 2 diabetes
+P100073,2025-04-09,J18.9,"Pneumonia, unspecified"
+P100073,2025-06-03,I10,Hypertension
+P100073,2025-07-11,R09.89,Respiratory symptom
+P100073,2025-07-19,I50.9,"Heart failure, unspecified"
+P100073,2025-08-27,I10,Hypertension
+P100074,2023-03-27,R09.89,Respiratory symptom
+P100074,2023-05-01,I50.9,"Heart failure, unspecified"
+P100074,2023-05-06,J18.9,"Pneumonia, unspecified"
+P100074,2023-08-08,I50.9,"Heart failure, unspecified"
+P100074,2023-11-11,I10,Hypertension
+P100074,2024-05-19,R09.89,Respiratory symptom
+P100074,2024-08-22,R09.89,Respiratory symptom
+P100074,2024-10-28,I10,Hypertension
+P100074,2024-10-30,J18.9,"Pneumonia, unspecified"
+P100074,2024-11-04,I10,Hypertension
+P100074,2025-02-21,R09.89,Respiratory symptom
+P100074,2025-03-27,I50.9,"Heart failure, unspecified"
+P100075,2023-01-23,I10,Hypertension
+P100075,2023-02-06,E11.9,Type 2 diabetes
+P100075,2023-02-17,E11.9,Type 2 diabetes
+P100075,2023-04-20,R09.89,Respiratory symptom
+P100075,2023-04-28,R09.89,Respiratory symptom
+P100075,2023-05-27,I50.9,"Heart failure, unspecified"
+P100075,2023-06-21,I10,Hypertension
+P100075,2023-10-22,I10,Hypertension
+P100075,2023-11-15,I50.9,"Heart failure, unspecified"
+P100075,2023-12-09,R09.89,Respiratory symptom
+P100075,2023-12-14,R09.89,Respiratory symptom
+P100075,2024-04-26,I50.9,"Heart failure, unspecified"
+P100075,2024-05-09,R09.89,Respiratory symptom
+P100075,2024-10-12,I50.9,"Heart failure, unspecified"
+P100075,2025-09-16,J18.9,"Pneumonia, unspecified"
+P100076,2023-04-07,E11.9,Type 2 diabetes
+P100076,2023-07-08,I10,Hypertension
+P100076,2023-07-17,I10,Hypertension
+P100076,2023-08-13,J18.9,"Pneumonia, unspecified"
+P100076,2023-12-09,I50.9,"Heart failure, unspecified"
+P100076,2024-02-27,I10,Hypertension
+P100076,2024-05-20,I10,Hypertension
+P100076,2024-07-11,R09.89,Respiratory symptom
+P100076,2024-10-23,I10,Hypertension
+P100076,2024-11-13,R09.89,Respiratory symptom
+P100076,2025-03-28,I10,Hypertension
+P100076,2025-04-06,I50.9,"Heart failure, unspecified"
+P100076,2025-04-18,R09.89,Respiratory symptom
+P100077,2023-04-05,R09.89,Respiratory symptom
+P100077,2023-06-01,E11.9,Type 2 diabetes
+P100077,2023-12-28,R09.89,Respiratory symptom
+P100077,2024-08-07,R09.89,Respiratory symptom
+P100077,2024-10-06,E11.9,Type 2 diabetes
+P100077,2025-01-18,R09.89,Respiratory symptom
+P100077,2025-02-21,I50.9,"Heart failure, unspecified"
+P100077,2025-04-25,J18.9,"Pneumonia, unspecified"
+P100078,2022-12-29,R09.89,Respiratory symptom
+P100078,2023-12-30,E11.9,Type 2 diabetes
+P100078,2024-03-17,E11.9,Type 2 diabetes
+P100078,2024-05-22,R09.89,Respiratory symptom
+P100078,2024-10-02,I10,Hypertension
+P100078,2025-04-29,I50.9,"Heart failure, unspecified"
+P100078,2025-07-23,E11.9,Type 2 diabetes
+P100079,2023-02-11,I50.9,"Heart failure, unspecified"
+P100079,2023-04-07,I50.9,"Heart failure, unspecified"
+P100079,2023-07-10,I10,Hypertension
+P100079,2023-07-12,E11.9,Type 2 diabetes
+P100079,2024-02-25,E11.9,Type 2 diabetes
+P100079,2024-06-10,I50.9,"Heart failure, unspecified"
+P100079,2025-01-15,R09.89,Respiratory symptom
+P100079,2025-02-08,J18.9,"Pneumonia, unspecified"
+P100079,2025-05-21,J18.9,"Pneumonia, unspecified"
+P100079,2025-06-05,I50.9,"Heart failure, unspecified"
+P100079,2025-07-16,I10,Hypertension
+P100079,2025-10-16,E11.9,Type 2 diabetes
+P100080,2023-05-02,E11.9,Type 2 diabetes
+P100080,2023-06-01,J18.9,"Pneumonia, unspecified"
+P100080,2023-11-13,J18.9,"Pneumonia, unspecified"
+P100080,2024-06-29,J18.9,"Pneumonia, unspecified"
+P100080,2024-08-07,E11.9,Type 2 diabetes
+P100081,2023-04-11,I50.9,"Heart failure, unspecified"
+P100081,2023-10-06,I10,Hypertension
+P100081,2024-04-17,I50.9,"Heart failure, unspecified"
+P100081,2024-05-05,I10,Hypertension
+P100081,2024-07-15,I10,Hypertension
+P100081,2024-08-13,J18.9,"Pneumonia, unspecified"
+P100081,2024-11-22,R09.89,Respiratory symptom
+P100081,2025-02-10,R09.89,Respiratory symptom
+P100081,2025-08-13,I10,Hypertension
+P100082,2022-12-13,E11.9,Type 2 diabetes
+P100082,2023-04-08,I50.9,"Heart failure, unspecified"
+P100082,2023-06-09,E11.9,Type 2 diabetes
+P100082,2023-08-31,R09.89,Respiratory symptom
+P100082,2023-10-03,R09.89,Respiratory symptom
+P100082,2023-10-04,I10,Hypertension
+P100082,2023-12-22,I50.9,"Heart failure, unspecified"
+P100082,2024-03-16,I50.9,"Heart failure, unspecified"
+P100082,2024-06-02,I10,Hypertension
+P100082,2024-08-08,I10,Hypertension
+P100082,2024-11-26,I10,Hypertension
+P100082,2025-01-29,I10,Hypertension
+P100082,2025-02-06,E11.9,Type 2 diabetes
+P100082,2025-02-14,R09.89,Respiratory symptom
+P100082,2025-03-02,I50.9,"Heart failure, unspecified"
+P100083,2023-09-20,J18.9,"Pneumonia, unspecified"
+P100083,2023-12-15,J18.9,"Pneumonia, unspecified"
+P100083,2025-03-28,R09.89,Respiratory symptom
+P100083,2025-04-09,I10,Hypertension
+P100083,2025-05-13,J18.9,"Pneumonia, unspecified"
+P100083,2025-06-08,I50.9,"Heart failure, unspecified"
+P100084,2023-03-08,E11.9,Type 2 diabetes
+P100084,2023-04-01,R09.89,Respiratory symptom
+P100084,2023-08-16,J18.9,"Pneumonia, unspecified"
+P100084,2023-09-30,E11.9,Type 2 diabetes
+P100084,2024-02-13,R09.89,Respiratory symptom
+P100084,2024-03-11,I10,Hypertension
+P100084,2024-03-26,I10,Hypertension
+P100084,2024-07-03,I50.9,"Heart failure, unspecified"
+P100084,2025-04-04,J18.9,"Pneumonia, unspecified"
+P100084,2025-07-13,I10,Hypertension
+P100084,2025-08-20,E11.9,Type 2 diabetes
+P100084,2025-09-18,J18.9,"Pneumonia, unspecified"
+P100085,2023-04-02,E11.9,Type 2 diabetes
+P100085,2023-11-12,J18.9,"Pneumonia, unspecified"
+P100085,2023-11-25,J18.9,"Pneumonia, unspecified"
+P100085,2024-06-16,I50.9,"Heart failure, unspecified"
+P100085,2024-07-28,I50.9,"Heart failure, unspecified"
+P100085,2024-08-13,J18.9,"Pneumonia, unspecified"
+P100085,2024-08-26,I10,Hypertension
+P100085,2024-09-17,I10,Hypertension
+P100085,2025-02-14,E11.9,Type 2 diabetes
+P100085,2025-06-30,E11.9,Type 2 diabetes
+P100086,2022-11-20,J18.9,"Pneumonia, unspecified"
+P100086,2022-11-24,I50.9,"Heart failure, unspecified"
+P100086,2023-02-05,R09.89,Respiratory symptom
+P100086,2024-06-23,I50.9,"Heart failure, unspecified"
+P100086,2025-03-31,J18.9,"Pneumonia, unspecified"
+P100087,2022-12-30,I50.9,"Heart failure, unspecified"
+P100087,2023-07-01,J18.9,"Pneumonia, unspecified"
+P100087,2023-07-16,J18.9,"Pneumonia, unspecified"
+P100087,2023-11-07,R09.89,Respiratory symptom
+P100087,2023-11-19,E11.9,Type 2 diabetes
+P100087,2023-11-21,I50.9,"Heart failure, unspecified"
+P100087,2024-01-21,I10,Hypertension
+P100087,2024-05-17,I50.9,"Heart failure, unspecified"
+P100087,2024-05-25,I50.9,"Heart failure, unspecified"
+P100087,2024-09-03,R09.89,Respiratory symptom
+P100087,2024-11-08,I50.9,"Heart failure, unspecified"
+P100087,2025-07-01,J18.9,"Pneumonia, unspecified"
+P100088,2023-07-22,I10,Hypertension
+P100088,2024-08-22,I50.9,"Heart failure, unspecified"
+P100088,2024-10-14,E11.9,Type 2 diabetes
+P100088,2024-11-18,R09.89,Respiratory symptom
+P100088,2024-12-13,J18.9,"Pneumonia, unspecified"
+P100089,2023-03-22,J18.9,"Pneumonia, unspecified"
+P100089,2024-01-08,I10,Hypertension
+P100089,2024-01-27,J18.9,"Pneumonia, unspecified"
+P100089,2024-09-27,J18.9,"Pneumonia, unspecified"
+P100089,2024-11-29,R09.89,Respiratory symptom
+P100089,2024-11-30,I10,Hypertension
+P100089,2025-09-28,I50.9,"Heart failure, unspecified"
+P100090,2022-12-11,I50.9,"Heart failure, unspecified"
+P100090,2023-01-16,I50.9,"Heart failure, unspecified"
+P100090,2023-12-01,I10,Hypertension
+P100090,2024-07-02,I10,Hypertension
+P100090,2024-08-11,J18.9,"Pneumonia, unspecified"
+P100090,2025-01-13,R09.89,Respiratory symptom
+P100090,2025-05-12,I10,Hypertension
+P100090,2025-06-11,R09.89,Respiratory symptom
+P100090,2025-09-12,I10,Hypertension
+P100090,2025-10-21,R09.89,Respiratory symptom
+P100091,2022-11-25,I50.9,"Heart failure, unspecified"
+P100091,2023-03-20,I50.9,"Heart failure, unspecified"
+P100091,2023-10-13,J18.9,"Pneumonia, unspecified"
+P100091,2023-10-14,J18.9,"Pneumonia, unspecified"
+P100091,2025-03-22,R09.89,Respiratory symptom
+P100091,2025-08-09,I10,Hypertension
+P100092,2023-01-20,J18.9,"Pneumonia, unspecified"
+P100092,2023-10-25,E11.9,Type 2 diabetes
+P100092,2023-11-28,E11.9,Type 2 diabetes
+P100092,2023-12-24,E11.9,Type 2 diabetes
+P100092,2024-03-10,I50.9,"Heart failure, unspecified"
+P100092,2025-04-24,R09.89,Respiratory symptom
+P100092,2025-04-27,E11.9,Type 2 diabetes
+P100092,2025-10-18,J18.9,"Pneumonia, unspecified"
+P100093,2022-12-27,I50.9,"Heart failure, unspecified"
+P100093,2023-02-01,I50.9,"Heart failure, unspecified"
+P100093,2023-03-24,J18.9,"Pneumonia, unspecified"
+P100093,2023-07-12,I10,Hypertension
+P100093,2023-08-14,J18.9,"Pneumonia, unspecified"
+P100093,2024-02-11,R09.89,Respiratory symptom
+P100093,2024-05-23,J18.9,"Pneumonia, unspecified"
+P100093,2024-09-07,R09.89,Respiratory symptom
+P100093,2024-09-22,R09.89,Respiratory symptom
+P100093,2024-10-24,R09.89,Respiratory symptom
+P100093,2025-02-24,R09.89,Respiratory symptom
+P100093,2025-03-20,J18.9,"Pneumonia, unspecified"
+P100094,2022-12-09,I10,Hypertension
+P100094,2023-01-24,R09.89,Respiratory symptom
+P100094,2023-09-04,I10,Hypertension
+P100094,2023-11-25,J18.9,"Pneumonia, unspecified"
+P100094,2023-12-21,R09.89,Respiratory symptom
+P100094,2024-03-26,J18.9,"Pneumonia, unspecified"
+P100094,2024-06-04,R09.89,Respiratory symptom
+P100094,2025-08-20,J18.9,"Pneumonia, unspecified"
+P100095,2023-01-07,J18.9,"Pneumonia, unspecified"
+P100095,2023-01-20,I10,Hypertension
+P100095,2023-03-23,R09.89,Respiratory symptom
+P100095,2023-04-21,I10,Hypertension
+P100095,2024-02-29,J18.9,"Pneumonia, unspecified"
+P100095,2024-03-07,R09.89,Respiratory symptom
+P100095,2024-08-15,E11.9,Type 2 diabetes
+P100095,2025-03-19,I50.9,"Heart failure, unspecified"
+P100095,2025-08-25,R09.89,Respiratory symptom
+P100096,2023-02-25,I50.9,"Heart failure, unspecified"
+P100096,2023-04-18,J18.9,"Pneumonia, unspecified"
+P100096,2023-05-09,R09.89,Respiratory symptom
+P100096,2023-05-23,I10,Hypertension
+P100096,2023-10-28,I10,Hypertension
+P100096,2024-03-23,I50.9,"Heart failure, unspecified"
+P100096,2024-08-02,I10,Hypertension
+P100097,2022-12-07,R09.89,Respiratory symptom
+P100097,2024-02-07,I10,Hypertension
+P100097,2024-07-29,R09.89,Respiratory symptom
+P100097,2024-12-04,E11.9,Type 2 diabetes
+P100097,2025-02-05,I10,Hypertension
+P100098,2023-01-08,J18.9,"Pneumonia, unspecified"
+P100098,2023-04-20,R09.89,Respiratory symptom
+P100098,2023-08-28,I50.9,"Heart failure, unspecified"
+P100098,2023-11-14,I10,Hypertension
+P100098,2024-04-20,I50.9,"Heart failure, unspecified"
+P100098,2024-06-17,R09.89,Respiratory symptom
+P100098,2024-07-06,J18.9,"Pneumonia, unspecified"
+P100098,2024-07-27,E11.9,Type 2 diabetes
+P100098,2024-11-02,I10,Hypertension
+P100098,2025-05-27,R09.89,Respiratory symptom
+P100098,2025-07-22,I50.9,"Heart failure, unspecified"
+P100098,2025-08-13,I10,Hypertension
+P100099,2023-01-18,I10,Hypertension
+P100099,2023-06-01,J18.9,"Pneumonia, unspecified"
+P100099,2023-09-06,J18.9,"Pneumonia, unspecified"
+P100099,2023-11-04,I10,Hypertension
+P100099,2024-03-22,J18.9,"Pneumonia, unspecified"
+P100099,2024-11-01,J18.9,"Pneumonia, unspecified"
+P100099,2024-11-06,I50.9,"Heart failure, unspecified"
+P100099,2025-01-07,J18.9,"Pneumonia, unspecified"
+P100099,2025-02-22,I10,Hypertension
+P100099,2025-05-31,I50.9,"Heart failure, unspecified"
