@@ -94,11 +94,24 @@ class MedSigLIPEmbedder:
         return emb
 
 def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
+    """
+    Hybrid retrieval using multiple similarity measures with thresholding.
+    Combines cosine similarity, dot product similarity, and inverse Euclidean distance.
+    Returns top-k results above a defined threshold.
+    """
+    global FAISS_INDEX
         # ==========================================================
     # 2️⃣ STRONG HYBRID RETRIEVAL WITH THRESHOLD (IMAGE-ONLY)
     # ==========================================================
-    db_embs = FAISS_INDEX.reconstruct_n(0, FAISS_INDEX.ntotal)
+    # db_embs = FAISS_INDEX.reconstruct_n(0, FAISS_INDEX.ntotal) # get all db embeddings
+    db_embs = []
+    for i in range(FAISS_INDEX.ntotal):
+        emb = FAISS_INDEX.reconstruct(i)
+        db_embs.append(emb)
     db_embs = np.array(db_embs, dtype=np.float32)
+
+    print(f"Database embeddings shape: {db_embs.shape}, Query embedding shape: {q_emb.shape}")
+
 
     # Normalize
     db_embs = db_embs / np.linalg.norm(db_embs, axis=1, keepdims=True)
@@ -115,12 +128,17 @@ def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
     hybrid_score = alpha * cos_sim + beta * dot_sim + gamma * inv_euc_sim
 
     # Apply threshold
+    print(f"Hybrid scores range: min {hybrid_score.min()}, max {hybrid_score.max()}")
     threshold = 0.8
+    # find indices where the hybrid score meets the threshold
+    # np.all(...) returns a scalar for 1-D arrays, so use np.where to get indices
     valid_indices = np.where(hybrid_score >= threshold)[0]
-    if len(valid_indices) == 0:
-        valid_indices = np.arange((hybrid_score))
+    # fallback: if nothing meets threshold, consider all indices (so retrieval still returns something)
+    if valid_indices.size == 0:
+        valid_indices = np.arange(hybrid_score.shape[0])
 
     # Sort and select top-K
+    print(f"Total valid indices above threshold: {len(valid_indices)}")
     sorted_indices = valid_indices[np.argsort(hybrid_score[valid_indices])[::-1]]
     topk_indices = sorted_indices[:TOP_K]
     scores = hybrid_score[topk_indices]
@@ -149,7 +167,7 @@ def assemble_prompt_from_reports(reports: List[Dict[str, Any]], query_projection
         f = str(r.get("findings") or "")
         im = str(r.get("impression") or "")
         max_len = 800
-        print(f"Finidings and Impressions before truncation: {f}  {im}", f, im)
+        # print(f"Finidings and Impressions before truncation: {f}  {im}", f, im)
         try:
             if len(f) > max_len:
                 f = f[:max_len] + " ... [truncated]"
@@ -211,7 +229,7 @@ def startup_load():
 # --------------------------
 # Endpoint: /summarize
 # --------------------------
-def summarize(file: bytes, is_base_retrival = False) -> SummarizeResponse:
+def summarize(file: bytes, patient_id: str, patient_context: str, is_base_retrival: bool = False) -> SummarizeResponse:
     """
     Accept an image file and return retrieved examples + generated Findings/Impression.
     All behavior (k, context size, models, etc.) is hardcoded.
@@ -234,8 +252,10 @@ def summarize(file: bytes, is_base_retrival = False) -> SummarizeResponse:
     # 2) Retrieve top-k
     # scores, ids = retrive_topk_hybrid(q_emb, TOP_K) if is_base_retrival else retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
     if is_base_retrival:
+        print("Using base retrieval...")
         scores, ids = retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
     else:
+        print("Using hybrid retrieval...")
         scores, ids = retrive_topk_hybrid(q_emb, TOP_K)
     # 3) Map ids -> metadata
     results = []
@@ -253,6 +273,18 @@ def summarize(file: bytes, is_base_retrival = False) -> SummarizeResponse:
     # 4) Compose prompt
     top_n = min(MAX_CONTEXT_REPORTS, len(results))
     context_reports = results[:top_n]
+
+    print("Assembling prompt from retrieved reports...")
+
     prompt = assemble_prompt_from_reports(context_reports, query_projection=None)
+
+    if not is_base_retrival:
+        prompt += f"""Now given the patient history context below
+        — be concise and mention uncertainty where appropriate.
+        Patient History Context:
+        Patinet ID: {patient_id}
+        {patient_context} """
+
+    print("✅ Prompt assembled.")
 
     return prompt

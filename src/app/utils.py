@@ -20,3 +20,12 @@ def create_pdf_from_summary(summary_text: str) -> bytes:
     
     buffer.seek(0)
     return buffer.getvalue()
+
+def load_json_file(file_path: str):
+    """
+    Loads a JSON file and returns its content.
+    """
+    import json
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+    return data

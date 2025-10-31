@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 import mongoengine as me
 import google.generativeai as genai
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 
 from models import CorrectionRequest, ReportResponse, DownloadRequest, AcceptReportRequest
 from database import Report
@@ -45,9 +46,13 @@ embeddings_path = "../embeddings/"
 index_path = os.path.join(embeddings_path, "images.index")
 meta_path = os.path.join(embeddings_path, "metadata.jsonl")
 
-# --- Database & GenAI Client Configuration on Startup ---
-@app.on_event("startup")
-def startup_event():
+global METADATA_HISTORY
+
+
+# Use FastAPI lifespan instead of deprecated startup/shutdown events
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # STARTUP
     # Configure Google API Key
     google_api_key = os.getenv("GOOGLE_API_KEY")
     if not google_api_key:
@@ -60,8 +65,20 @@ def startup_event():
     print("Medgemma model is ready.")
 
     print("Loading FAISS index and metadata...")
-    startup_load()    
+    startup_load()
     print("FAISS index and metadata loaded.")
+
+    # Prefer a module-relative absolute path so the server can be started from anywhere
+    metadata_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "synthetic_ehr", "out_all_patients_context.json")
+    )
+
+    # store loaded metadata on the app.state so route handlers can access it reliably
+    try:
+        app.state.METADATA_HISTORY = utils.load_json_file(metadata_path)
+    except Exception:
+        # fallback to empty dict to avoid attribute errors in routes
+        app.state.METADATA_HISTORY = {}
 
     # Configure and connect to MongoDB Atlas
     mongo_uri = os.getenv("MONGO_URI")
@@ -73,11 +90,17 @@ def startup_event():
     except Exception as e:
         print(f"Failed to connect to MongoDB Atlas: {e}")
 
-# --- Database Disconnection on Shutdown ---
-@app.on_event("shutdown")
-def shutdown_db_client():
-    me.disconnect()
-    print("Disconnected from MongoDB.")
+    try:
+        yield
+    finally:
+        # SHUTDOWN
+        try:
+            me.disconnect()
+            print("Disconnected from MongoDB.")
+        except Exception:
+            pass
+
+app = FastAPI(title="Clinical Diagnosis AI Suite", lifespan=lifespan)
 
 # Mount the 'static' folder at URL path '/static'
 statis_path = os.path.join(os.path.dirname(__file__), 'static')
@@ -103,6 +126,7 @@ async def diagnose(
     image: Optional[UploadFile] = File(...),
     text: Optional[str] = Form(...),
     is_base_retrival: Optional[bool] = Form(False),
+    patient_id: Optional[str] = Form(...),
     corrections: Optional[str] = Form(None),
     previous_summary: Optional[str] = Form(None),
 ):
@@ -114,9 +138,18 @@ async def diagnose(
         raise HTTPException(status_code=400, detail="Please provide either an image or text.")
 
     image_data = await image.read() if image else None
+    patient_context = None
+
     
     try:
-        prepare_context = summarize(image_data, is_base_retrival)
+        if patient_id:
+            metadata_store = getattr(app.state, "METADATA_HISTORY", {})
+            patient_context = metadata_store.get(patient_id, "No relevant patient history found.")
+            if patient_context is None:
+                print(f"No metadata found for patient ID: {patient_id}")
+            else:
+                print(f"Loaded metadata for patient ID: {patient_id}")
+        prepare_context = summarize(file=image_data, is_base_retrival=is_base_retrival, patient_id=patient_id, patient_context=patient_context)
         result = infer(image_data, prepare_context)
         summary = result # .generated_text
         print("Type of Summary:", type(summary))
@@ -226,6 +259,57 @@ async def download_report(request: DownloadRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create PDF: {e}")
 
+@app.get("/patient_history")
+async def get_metadata(patient_id: str, max_entries: Optional[int] = None):
+    """
+    Fetches a patient's precomputed context string (or object) loaded at startup.
+
+    Query params:
+    - patient_id: required patient identifier
+    - max_entries: optional integer to truncate the history portion to the most-recent N entries
+    """
+    try:
+        metadata_store = getattr(app.state, "METADATA_HISTORY", {})
+        entry = metadata_store.get(patient_id)
+        if entry is None:
+            return JSONResponse(status_code=404, content={"error": "No data found for the given patient ID."})
+
+        # # If no truncation requested, return stored entry as-is
+        # if max_entries is None:
+        #     return JSONResponse(content={"metadata": entry})
+
+        # # If the stored entry is a plain context string (format: "Meta Data:\n...\n\nHistory:\n<entries...>")
+        # if isinstance(entry, str):
+        #     parts = entry.split("\n\nHistory:\n", 1)
+        #     meta_part = parts[0]
+        #     history_part = parts[1] if len(parts) > 1 else ""
+        #     entries = [e.strip() for e in history_part.split("\n\n") if e.strip()]
+        #     truncated = "\n\n".join(entries[:max_entries])
+        #     new_context = meta_part + "\n\nHistory:\n" + truncated
+        #     return JSONResponse(content={"metadata": new_context})
+
+        # # If the stored entry is structured (dict) with a 'history' list, truncate that list
+        # if isinstance(entry, dict):
+        #     hist = entry.get("history")
+        #     if isinstance(hist, list):
+        #         # Try to sort by parsed date descending if available, otherwise keep order
+        #         def _get_date(h):
+        #             return h.get("_parsed_date") or h.get("date") or ""
+
+        #         try:
+        #             sorted_hist = sorted(hist, key=lambda x: _get_date(x) or "", reverse=True)
+        #         except Exception:
+        #             sorted_hist = hist
+
+        #         truncated_hist = sorted_hist[:max_entries]
+        #         new_entry = dict(entry)
+        #         new_entry["history"] = truncated_hist
+        #         return JSONResponse(content={"metadata": new_entry})
+
+        # Fallback: return the raw entry if we don't know how to truncate it
+        return JSONResponse(content={"metadata": entry})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to load metadata: {e}")
 
 @app.get("/reports", response_model=List[ReportResponse])
 async def get_reports():

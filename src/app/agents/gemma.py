@@ -168,8 +168,24 @@ def infer(
 
     # Build messages same shape your script used
     role_instruction = (
-        role_instruction
-        or "You are an expert radiologist. Explain how the summarization was defined with respect to the given X-ray."
+        """
+        You are an expert radiologist. 
+        Explain how the summarization was defined with respect to the given X-ray.
+        Provide the Findings, Impression, and Suggestion sections in detail.
+        Strictly avoid making up any findings that are not visible in the image.
+        Provide the report in the following Markdown format:
+        ## Summary on the X-ray Image:
+        [detailed summary here in 3 - 5 lines]
+        ### Findings
+        [detailed findings in a bullet list here min 3 points]
+        ### Impression
+        [detailed impression in a bullet list here min 3 points]
+
+        [If there are no abnormal findings, clearly state that the X-ray appears normal.]
+
+        [IMPRTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.
+        And follow the markdown format exactly as mentioned above.]
+        """
     )
     prompt = (
         prompt
