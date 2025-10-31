@@ -10,7 +10,12 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 
-from models import CorrectionRequest, ReportResponse, DownloadRequest, AcceptReportRequest
+from models import (
+    CorrectionRequest,
+    ReportResponse,
+    DownloadRequest,
+    AcceptReportRequest,
+)
 from database import Report
 import llm_services
 import utils
@@ -31,7 +36,7 @@ app = FastAPI(title="Clinical Diagnosis AI Suite")
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "null", 
+    "null",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -42,7 +47,7 @@ app.add_middleware(
 )
 
 # releavtive path to embeddings
-embeddings_path = "../embeddings/"
+embeddings_path = "../embeddings_25k/"
 index_path = os.path.join(embeddings_path, "images.index")
 meta_path = os.path.join(embeddings_path, "metadata.jsonl")
 
@@ -70,7 +75,12 @@ async def lifespan(app: FastAPI):
 
     # Prefer a module-relative absolute path so the server can be started from anywhere
     metadata_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "synthetic_ehr", "out_all_patients_context.json")
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "synthetic_ehr",
+            "out_all_patients_context.json",
+        )
     )
 
     # store loaded metadata on the app.state so route handlers can access it reliably
@@ -100,26 +110,30 @@ async def lifespan(app: FastAPI):
         except Exception:
             pass
 
+
 app = FastAPI(title="Clinical Diagnosis AI Suite", lifespan=lifespan)
 
 # Mount the 'static' folder at URL path '/static'
-statis_path = os.path.join(os.path.dirname(__file__), 'static')
+statis_path = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=statis_path), name="static")
+
 
 # --- API Endpoints ---
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    html_file = os.path.join(os.path.dirname(__file__), 'ui', 'index.html')
+    html_file = os.path.join(os.path.dirname(__file__), "ui", "index.html")
     try:
-        with open(html_file, 'r', encoding='utf-8') as file:
+        with open(html_file, "r", encoding="utf-8") as file:
             html_content = file.read()
         return HTMLResponse(content=html_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read HTML file: {e}")
 
+
 @app.get("/health")
 def health_root():
     return {"status": "Clinical Diagnosis API is running."}
+
 
 @app.post("/diagnose")
 async def diagnose(
@@ -135,29 +149,41 @@ async def diagnose(
     This summary is NOT saved to the database until feedback is provided.
     """
     if not image and not text:
-        raise HTTPException(status_code=400, detail="Please provide either an image or text.")
+        raise HTTPException(
+            status_code=400, detail="Please provide either an image or text."
+        )
 
     image_data = await image.read() if image else None
     patient_context = None
 
-    print ("Starting diagnosis process...")
-    print (f"Received parameters - is_base_retrival: {is_base_retrival}, patient_id: {patient_id}, corrections: {corrections is not None}, previous_summary: {previous_summary is not None}")
-    print (f"Image data size: {len(image_data) if image_data else 'No image provided'}, Text data size: {len(text) if text else 'No text provided'} ")
+    print("Starting diagnosis process...")
+    print(
+        f"Received parameters - is_base_retrival: {is_base_retrival}, patient_id: {patient_id}, corrections: {corrections is not None}, previous_summary: {previous_summary is not None}"
+    )
+    print(
+        f"Image data size: {len(image_data) if image_data else 'No image provided'}, Text data size: {len(text) if text else 'No text provided'} "
+    )
 
     return JSONResponse(content={"summary": {"output": "Debugging - process halted"}})
 
-    
     try:
         if patient_id:
             metadata_store = getattr(app.state, "METADATA_HISTORY", {})
-            patient_context = metadata_store.get(patient_id, "No relevant patient history found.")
+            patient_context = metadata_store.get(
+                patient_id, "No relevant patient history found."
+            )
             if patient_context is None:
                 print(f"No metadata found for patient ID: {patient_id}")
             else:
                 print(f"Loaded metadata for patient ID: {patient_id}")
-        prepare_context = summarize(file=image_data, is_base_retrival=is_base_retrival, patient_id=patient_id, patient_context=patient_context)
+        prepare_context = summarize(
+            file=image_data,
+            is_base_retrival=is_base_retrival,
+            patient_id=patient_id,
+            patient_context=patient_context,
+        )
         result = infer(image_data, prepare_context)
-        summary = result # .generated_text
+        summary = result  # .generated_text
         print("Type of Summary:", type(summary))
         print("Generated Summary:", summary)
         print("Replacing images in the summary...")
@@ -165,7 +191,7 @@ async def diagnose(
         print("Final Summary after replacing images:", summary)
         # import json
         # file = "C:\\Users\\lokesh-g\\Desktop\\sudss-app\\inference_output_20251020_160742.json"
-        # with open(file, "r", encoding='utf-8') as f: 
+        # with open(file, "r", encoding='utf-8') as f:
         #     summary = f.read()
         #     summary = json.loads(summary)
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
@@ -204,7 +230,6 @@ async def retrieve_and_generate(image: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Failed retrieve+generate: {e}")
 
 
-
 @app.post("/corrections")
 async def process_corrections(request: CorrectionRequest):
     """
@@ -212,24 +237,28 @@ async def process_corrections(request: CorrectionRequest):
     saves the final report to the database, and returns the new summary.
     """
     try:
-        trust_score, regenerated_summary = llm_services.calculate_trust_score_and_regenerate(
-            original_summary=request.original_summary,
-            feedback=request.feedback
+        trust_score, regenerated_summary = (
+            llm_services.calculate_trust_score_and_regenerate(
+                original_summary=request.original_summary, feedback=request.feedback
+            )
         )
 
         # Create and save the report to MongoDB
         new_report = Report(
-            category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']),
-            input_type='Image' if 'Image' in request.original_summary else 'Text',
+            category=random.choice(["X-Ray", "MRI", "General", "Lab"]),
+            input_type="Image" if "Image" in request.original_summary else "Text",
             trust_score=trust_score,
             summary=regenerated_summary,
-            details=request.original_summary
+            details=request.original_summary,
         )
         new_report.save()
 
         return JSONResponse(content={"summary": {"output": regenerated_summary}})
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to process corrections: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"Failed to process corrections: {e}"
+        )
+
 
 @app.post("/accept")
 async def process_acceptance(request: AcceptReportRequest):
@@ -239,17 +268,21 @@ async def process_acceptance(request: AcceptReportRequest):
     try:
         # Create and save the report to MongoDB
         new_report = Report(
-            category=random.choice(['X-Ray', 'MRI', 'General', 'Lab']),
-            input_type='Image' if 'Image' in request.summary else 'Text',
+            category=random.choice(["X-Ray", "MRI", "General", "Lab"]),
+            input_type="Image" if "Image" in request.summary else "Text",
             trust_score=100,
             summary=request.summary,
-            details=request.summary
+            details=request.summary,
         )
         new_report.save()
 
-        return JSONResponse(content={"message": "Report accepted and saved successfully."})
+        return JSONResponse(
+            content={"message": "Report accepted and saved successfully."}
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to process corrections: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"Failed to process corrections: {e}"
+        )
 
 
 @app.post("/diagnose/download")
@@ -259,11 +292,16 @@ async def download_report(request: DownloadRequest):
     """
     try:
         pdf_bytes = utils.create_pdf_from_summary(request.summary)
-        return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf", headers={
-            "Content-Disposition": "attachment; filename=diagnosis_summary.pdf"
-        })
+        return StreamingResponse(
+            iter([pdf_bytes]),
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": "attachment; filename=diagnosis_summary.pdf"
+            },
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create PDF: {e}")
+
 
 @app.get("/patient_history")
 async def get_metadata(patient_id: str, max_entries: Optional[int] = None):
@@ -278,7 +316,10 @@ async def get_metadata(patient_id: str, max_entries: Optional[int] = None):
         metadata_store = getattr(app.state, "METADATA_HISTORY", {})
         entry = metadata_store.get(patient_id)
         if entry is None:
-            return JSONResponse(status_code=404, content={"error": "No data found for the given patient ID."})
+            return JSONResponse(
+                status_code=404,
+                content={"error": "No data found for the given patient ID."},
+            )
 
         # # If no truncation requested, return stored entry as-is
         # if max_entries is None:
@@ -317,6 +358,7 @@ async def get_metadata(patient_id: str, max_entries: Optional[int] = None):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load metadata: {e}")
 
+
 @app.get("/reports", response_model=List[ReportResponse])
 async def get_reports():
     """
@@ -324,10 +366,11 @@ async def get_reports():
     Evaluations pages.
     """
     try:
-        reports = Report.objects().order_by('-generated_date')
+        reports = Report.objects().order_by("-generated_date")
         return [report.to_dict() for report in reports]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch reports: {e}")
+
 
 # To run this application:
 # 1. Create a .env file with your MONGO_URI and GOOGLE_API_KEY.
