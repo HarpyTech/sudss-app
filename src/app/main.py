@@ -140,6 +140,12 @@ async def diagnose(
     image_data = await image.read() if image else None
     patient_context = None
 
+    print ("Starting diagnosis process...")
+    print (f"Received parameters - is_base_retrival: {is_base_retrival}, patient_id: {patient_id}, corrections: {corrections is not None}, previous_summary: {previous_summary is not None}")
+    print (f"Image data size: {len(image_data) if image_data else 'No image provided'}, Text data size: {len(text) if text else 'No text provided'} ")
+
+    return JSONResponse(content={"summary": {"output": "Debugging - process halted"}})
+
     
     try:
         if patient_id:
