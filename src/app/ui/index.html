@@ -356,6 +356,7 @@
             let currentPage = 1;
             const ITEMS_PER_PAGE = 20;
             let currentSummary = ''; // Holds the latest generated summary for feedback
+            var META_DATA = {};
 
             // --- DOM ELEMENT REFERENCES ---
             const navLinks = document.querySelectorAll('.nav-link'),
@@ -456,6 +457,15 @@
                     const result = await response.json();
                     currentSummary = result.summary.output; // Save for feedback
                     // Convert markdown -> HTML
+                    if (isRegeneration) {
+                        META_DATA["regenrated_report"] = currentSummary;
+                        META_DATA["previous_report"] = META_DATA.current_summary;
+                        META_DATA["user_prompt_updated"] = result.summary.user_prompt;
+                    } else {
+                        META_DATA["current_summary"] = currentSummary;
+                        META_DATA["user_prompt"] = result.summary.user_prompt;
+                    }
+
 
                     if (currentSummary) {
                         // console.log("Assistant content:", assistantEntry.content);
