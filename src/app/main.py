@@ -164,7 +164,7 @@ async def diagnose(
         f"Image data size: {len(image_data) if image_data else 'No image provided'}, Text data size: {len(text) if text else 'No text provided'} "
     )
 
-    return JSONResponse(content={"summary": {"output": "Debugging - process halted"}})
+    # return JSONResponse(content={"summary": {"output": "Debugging - process halted"}})
 
     try:
         if patient_id:
@@ -181,7 +181,12 @@ async def diagnose(
             is_base_retrival=is_base_retrival,
             patient_id=patient_id,
             patient_context=patient_context,
+            corrections=corrections,
+            previous_summary=previous_summary,
+            text=text
         )
+        result = None
+        print("Prepared context for inference." + type(prepare_context).__name__)
         result = infer(image_data, prepare_context)
         summary = result  # .generated_text
         print("Type of Summary:", type(summary))

@@ -229,7 +229,9 @@ def startup_load():
 # --------------------------
 # Endpoint: /summarize
 # --------------------------
-def summarize(file: bytes, patient_id: str, patient_context: str, is_base_retrival: bool = False) -> SummarizeResponse:
+def summarize(file: bytes, patient_id: str, patient_context: str, 
+              is_base_retrival: bool = False, corrections: str = None,
+              previous_summary: str = None, text: str = None) -> SummarizeResponse:
     """
     Accept an image file and return retrieved examples + generated Findings/Impression.
     All behavior (k, context size, models, etc.) is hardcoded.
@@ -251,7 +253,7 @@ def summarize(file: bytes, patient_id: str, patient_context: str, is_base_retriv
 
     # 2) Retrieve top-k
     # scores, ids = retrive_topk_hybrid(q_emb, TOP_K) if is_base_retrival else retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
-    if is_base_retrival:
+    if is_base_retrival == False:
         print("Using base retrieval...")
         scores, ids = retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
     else:
@@ -284,6 +286,20 @@ def summarize(file: bytes, patient_id: str, patient_context: str, is_base_retriv
         Patient History Context:
         Patinet ID: {patient_id}
         {patient_context} """
+
+    if corrections:
+        prompt += f"""
+        Additionally, please incorporate the following corrections into your report:
+        {corrections}
+
+        Previous Summary:
+        {previous_summary}
+        """
+    if text:
+        prompt += f"""
+        Furthermore, please consider the following additional information as clinician notes:
+        {text}
+        """
 
     print("✅ Prompt assembled.")
 

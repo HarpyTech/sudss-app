@@ -173,7 +173,9 @@ def infer(
         Explain how the summarization was defined with respect to the given X-ray.
         Provide the Findings, Impression, and Suggestion sections in detail.
         Strictly avoid making up any findings that are not visible in the image.
+        Get the patient name from the Patient History Context if available, else use 'Test Patient'.
         Provide the report in the following Markdown format:
+        ## Patient Name: [Patient Name <If not available, write 'Test Patient'>]
         ## Summary on the X-ray Image:
         [detailed summary here in 3 - 5 lines]
         ### Findings
