@@ -27,8 +27,8 @@ import os
 # --------------------------
 # Hardcoded configuration
 # --------------------------
-INDEX_PATH = os.path.abspath("./src/embeddings/images.index")  # hardcoded index file
-META_PATH = os.path.abspath("./src/embeddings/metadata.jsonl")  # hardcoded metadata jsonl
+INDEX_PATH = os.path.abspath("./src/embeddings_25k/images.index")  # hardcoded index file
+META_PATH = os.path.abspath("./src/embeddings_25k/metadata.jsonl")  # hardcoded metadata jsonl
 MEDSIGLIP_MODEL = "google/medsiglip-448"  # medsiglip model used for embeddings
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 TOP_K = 5
@@ -280,7 +280,7 @@ def summarize(file: bytes, patient_id: str, patient_context: str,
 
     prompt = assemble_prompt_from_reports(context_reports, query_projection=None)
 
-    if not is_base_retrival:
+    if is_base_retrival:
         prompt += f"""Now given the patient history context below
         — be concise and mention uncertainty where appropriate.
         Patient History Context:

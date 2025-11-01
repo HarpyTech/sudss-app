@@ -188,20 +188,22 @@ async def diagnose(
         )
         result = None
         print("Prepared context for inference." + type(prepare_context).__name__)
-        result = infer(image_data, prepare_context)
+        # result, file = infer(image_data, prepare_context)
         summary = result  # .generated_text
         print("Type of Summary:", type(summary))
         print("Generated Summary:", summary)
         print("Replacing images in the summary...")
+        # print("File data for image conversion:", file)
         summary = convert_images_to_base64(summary)
-        print("Final Summary after replacing images:", summary)
+        # print("Final Summary after replacing images:", summary)
+        print("Diagnosis process completed.")
         # import json
         # file = "C:\\Users\\lokesh-g\\Desktop\\sudss-app\\inference_output_20251020_160742.json"
         # with open(file, "r", encoding='utf-8') as f:
         #     summary = f.read()
         #     summary = json.loads(summary)
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
-        return JSONResponse(content={"summary": {"output": summary}})
+        return JSONResponse(content={"summary": utils.get_results("./misc/inference_output_20251101_210448.json")})
     except Exception as e:
         print(f"Error during diagnosis: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")

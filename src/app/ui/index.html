@@ -457,17 +457,14 @@
                     currentSummary = result.summary.output; // Save for feedback
                     // Convert markdown -> HTML
 
-                    const assistantEntry = currentSummary.find(entry => entry.role === "assistant");
-
-                    if (assistantEntry) {
-                        console.log("Assistant content:", assistantEntry.content);
-                        const html = marked.parse(assistantEntry.content);
+                    if (currentSummary) {
+                        // console.log("Assistant content:", assistantEntry.content);
+                        const html = marked.parse(currentSummary);
                         outputArea.innerHTML = `<div class="prose">${html}</div>`;
                     } else {
                         console.log("No assistant entry found.");
                     }
-                    currentSummary = assistantEntry ? assistantEntry.content : currentSummary;
-
+                    
 
                     if (!isRegeneration) {
                         // Only add to history on initial generation for this demo

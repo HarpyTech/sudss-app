@@ -267,7 +267,7 @@ def infer(
         json.dump(summary, f, indent=4)
     
     # return InferenceResult(prompt=prompt, generated_text=generated_text, raw_output=str(output))
-    return data_result, filename
+    return (data_result, filename)
 
 def replace_images(obj):
     if isinstance(obj, list):
