@@ -104,13 +104,35 @@ class InferenceResult(BaseModel):
 from PIL import Image
 import base64
 import io
+import datetime
+from pathlib import Path
 
 def pil_image_to_base64(image: Image.Image, format: str = "PNG") -> str:
     """Convert a PIL image to a base64 data URI."""
-    buffer = io.BytesIO()
-    image.save(buffer, format=format)
-    return f"data:image/{format.lower()};base64,{base64.b64encode(buffer.getvalue()).decode()}"
+    # buffer = io.BytesIO()
+    # Save image to static/inputs_images with a timestamped filename and return POSIX path.
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    base_dir = Path(__file__).parent.resolve()
+    image_dir = (base_dir / "static" / "inputs_images").resolve()
 
+    try:
+        image_dir.mkdir(parents=True, exist_ok=True)
+        # normalize extension (Pillow expects "JPEG" for .jpg)
+        ext = format.lower().replace("jpeg", "jpg")
+        file_path = image_dir / f"input_image_{timestamp}.{ext}"
+        # Pillow needs the format name like "PNG" or "JPEG"
+        image.save(file_path, format=format)
+        return file_path.as_posix()
+    except Exception as e:
+        # If saving to disk fails, fall back to returning a base64 data URI
+        try:
+            buffer = BytesIO()
+            image.save(buffer, format=format)
+            b64 = base64.b64encode(buffer.getvalue()).decode("ascii")
+            return f"data:image/{ext};base64,{b64}"
+        except Exception as e2:
+            print(f"Error saving or encoding image: {e}; fallback error: {e2}")
+            return ""
 
 def convert_images_to_base64(data):
     """Recursively traverse the data structure and convert PIL.Image objects to base64 strings."""
@@ -122,7 +144,7 @@ def convert_images_to_base64(data):
             if key == "image" and isinstance(value, Image.Image):
                 new_dict[key] = pil_image_to_base64(value)
             elif key == "image" and not isinstance(value, Image.Image):
-                new_dict[key] = str(value)
+                new_dict[key] = "INVALID_IMAGE"
             else:
                 new_dict[key] = convert_images_to_base64(value)
         return new_dict
@@ -173,19 +195,21 @@ def infer(
         Explain how the summarization was defined with respect to the given X-ray.
         Provide the Findings, Impression, and Suggestion sections in detail.
         Strictly avoid making up any findings that are not visible in the image.
-        Get the patient name from the Patient History Context if available, else use 'Test Patient'.
+        Get the patient name from the Patient History Meta Data first_name and last_name if available, else use 'Test Patient'.
         Provide the report in the following Markdown format:
-        ## Patient Name: [Patient Name <If not available, write 'Test Patient'>]
+        ### **Patient Name:** [Patient Name <If not available, write 'Test Patient'>]
         ## Summary on the X-ray Image:
         [detailed summary here in 3 - 5 lines]
+        ## Overall Summary:
+        [detailed summary on what are the improvements or deteriorations observed from previous history if available else write 'No previous history available to compare']
         ### Findings
         [detailed findings in a bullet list here min 3 points]
         ### Impression
         [detailed impression in a bullet list here min 3 points]
-
+ 
         [If there are no abnormal findings, clearly state that the X-ray appears normal.]
 
-        [IMPRTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.
+        [IMPORTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.
         And follow the markdown format exactly as mentioned above.]
         """
     )
@@ -243,7 +267,7 @@ def infer(
         json.dump(summary, f, indent=4)
     
     # return InferenceResult(prompt=prompt, generated_text=generated_text, raw_output=str(output))
-    return data_result
+    return data_result, filename
 
 def replace_images(obj):
     if isinstance(obj, list):

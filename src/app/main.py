@@ -175,6 +175,7 @@ async def diagnose(
             if patient_context is None:
                 print(f"No metadata found for patient ID: {patient_id}")
             else:
+                print(f"Patient context of the patient is : {patient_context}")
                 print(f"Loaded metadata for patient ID: {patient_id}")
         prepare_context = summarize(
             file=image_data,
