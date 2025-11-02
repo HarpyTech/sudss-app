@@ -118,10 +118,10 @@ def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
     q_emb_norm = q_emb / np.linalg.norm(q_emb, axis=1, keepdims=True)
 
     # Multiple similarity measures
-    cos_sim = np.dot(db_embs, q_emb_norm.squeeze())
-    dot_sim = np.dot(db_embs, q_emb.squeeze())
+    cos_sim = np.dot(db_embs, q_emb_norm.squeeze()) # Cosine similarity
+    dot_sim = np.dot(db_embs, q_emb.squeeze()) # Dot product similarity
     l2_dist = np.linalg.norm(db_embs - q_emb, axis=1)
-    inv_euc_sim = 1 / (1 + l2_dist)
+    inv_euc_sim = 1 / (1 + l2_dist) # Inverse Euclidean distance similarity
 
     # Weighted hybrid fusion
     alpha, beta, gamma = 0.5, 0.3, 0.2

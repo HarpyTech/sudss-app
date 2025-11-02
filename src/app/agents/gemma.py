@@ -197,6 +197,7 @@ def infer(
         Strictly avoid making up any findings that are not visible in the image.
         Get the patient name from the Patient History Meta Data first_name and last_name if available, else use 'Test Patient'.
         Provide the report in the following Markdown format:
+        <Start of Report>
         ### **Patient Name:** [Patient Name <If not available, write 'Test Patient'>]
         ## Summary on the X-ray Image:
         [detailed summary here in 3 - 5 lines]
@@ -210,9 +211,9 @@ def infer(
         [detailed summary on what are the improvements or deteriorations observed from previous history if available else write 'No previous history available to compare']
         [Compare to previous previous  history, and summarize Patient recovery satate as improving,  stable or worsening with respect to previous history if available else write 'No previous history available to compare']
 
-
+        <End of Report>
         [IMPORTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.
-        And follow the markdown format exactly as mentioned above.]
+        And follow the markdown format exactly as mentioned above. and make sure to include all sections and no repetitive.]
         """
     )
     prompt = (
