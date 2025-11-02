@@ -22,7 +22,7 @@ OUTPUT_FILE = BASE_DIR / f"api_test_results_{datetime.now().strftime('%Y%m%d_%H%
 # Default total request timeout (seconds). Set via env API_TIMEOUT if needed.
 DEFAULT_TIMEOUT = int(os.getenv("API_TIMEOUT", "1200"))  # 20 minutes default
 # Number of parallel workers to run concurrently. Tunable via API_WORKERS env var.
-WORKERS = int(os.getenv("API_WORKERS", "3"))
+WORKERS = int(os.getenv("API_WORKERS", "2"))
 # Number of retries for transient failures
 RETRIES = int(os.getenv("API_RETRIES", "0"))
 # Backoff base seconds
@@ -66,7 +66,7 @@ def perform_test(index, row):
             img_path = BASE_DIR / img_path
         if img_path.exists() and img_path.is_file():
             files = {"image": open(str(img_path), "rb")}
-            
+
         else:
             files = None
 
@@ -102,6 +102,7 @@ def perform_test(index, row):
 # Run tests with a ThreadPoolExecutor to allow concurrent long-running requests.
 with ThreadPoolExecutor(max_workers=WORKERS) as exec:
     futures = {exec.submit(perform_test, idx, row): idx for idx, row in df.iterrows()}
+    # futures = {exec.submit(perform_test, idx, row): idx for idx, row in df.head(1).iterrows()}
     completed = 0
     for fut in as_completed(futures):
         idx = futures[fut]

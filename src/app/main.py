@@ -175,7 +175,7 @@ async def diagnose(
             if patient_context is None:
                 print(f"No metadata found for patient ID: {patient_id}")
             else:
-                print(f"Patient context of the patient is : {patient_context}")
+                # print(f"Patient context of the patient is : {patient_context}")
                 print(f"Loaded metadata for patient ID: {patient_id}")
         prepare_context = summarize(
             file=image_data,
@@ -191,7 +191,7 @@ async def diagnose(
         result, file = infer(image_data, prepare_context)
         summary = result  # .generated_text
         print("Type of Summary:", type(summary))
-        print("Generated Summary:", summary)
+        # print("Generated Summary:", summary)
         print("Replacing images in the summary...")
         print("File data for image conversion:", file)
         summary = convert_images_to_base64(summary)
@@ -204,6 +204,7 @@ async def diagnose(
         #     summary = json.loads(summary)
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
         return JSONResponse(content={"summary": utils.get_results(file)})
+        # return JSONResponse(content={"summary": utils.get_results("./misc/inference_output_20251102_062025.json")})
     except Exception as e:
         print(f"Error during diagnosis: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")
