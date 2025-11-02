@@ -200,14 +200,16 @@ def infer(
         ### **Patient Name:** [Patient Name <If not available, write 'Test Patient'>]
         ## Summary on the X-ray Image:
         [detailed summary here in 3 - 5 lines]
-        ## Overall Summary:
-        [detailed summary on what are the improvements or deteriorations observed from previous history if available else write 'No previous history available to compare']
         ### Findings
         [detailed findings in a bullet list here min 3 points]
         ### Impression
         [detailed impression in a bullet list here min 3 points]
  
         [If there are no abnormal findings, clearly state that the X-ray appears normal.]
+        ## Overall Summary:
+        [detailed summary on what are the improvements or deteriorations observed from previous history if available else write 'No previous history available to compare']
+        [Compare to previous previous  history, and summarize Patient recovery satate as improving,  stable or worsening with respect to previous history if available else write 'No previous history available to compare']
+
 
         [IMPORTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.
         And follow the markdown format exactly as mentioned above.]

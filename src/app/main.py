@@ -188,12 +188,12 @@ async def diagnose(
         )
         result = None
         print("Prepared context for inference." + type(prepare_context).__name__)
-        # result, file = infer(image_data, prepare_context)
+        result, file = infer(image_data, prepare_context)
         summary = result  # .generated_text
         print("Type of Summary:", type(summary))
         print("Generated Summary:", summary)
         print("Replacing images in the summary...")
-        # print("File data for image conversion:", file)
+        print("File data for image conversion:", file)
         summary = convert_images_to_base64(summary)
         # print("Final Summary after replacing images:", summary)
         print("Diagnosis process completed.")
@@ -203,7 +203,7 @@ async def diagnose(
         #     summary = f.read()
         #     summary = json.loads(summary)
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
-        return JSONResponse(content={"summary": utils.get_results("./misc/inference_output_20251101_210448.json")})
+        return JSONResponse(content={"summary": utils.get_results(file)})
     except Exception as e:
         print(f"Error during diagnosis: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")
