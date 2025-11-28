@@ -20,9 +20,9 @@ OUTPUT_FILE = BASE_DIR / f"api_test_results_{datetime.now().strftime('%Y%m%d_%H%
 
 # --- Resilience / concurrency settings ---
 # Default total request timeout (seconds). Set via env API_TIMEOUT if needed.
-DEFAULT_TIMEOUT = int(os.getenv("API_TIMEOUT", "1200"))  # 20 minutes default
+DEFAULT_TIMEOUT = int(os.getenv("API_TIMEOUT", "1500"))  # 20 minutes default
 # Number of parallel workers to run concurrently. Tunable via API_WORKERS env var.
-WORKERS = int(os.getenv("API_WORKERS", "2"))
+WORKERS = int(os.getenv("API_WORKERS", "1"))
 # Number of retries for transient failures
 RETRIES = int(os.getenv("API_RETRIES", "0"))
 # Backoff base seconds
@@ -42,6 +42,7 @@ def _safe_write(index, status, body):
     with df_lock:
         df.at[index, "response_status"] = status
         # store JSON as string to avoid Excel serialization issues
+        print(f"Writing response for index={index}, status={status}")
         if isinstance(body, (dict, list)):
             df.at[index, "response_body"] = json.dumps(body, ensure_ascii=False)
         else:
@@ -56,6 +57,7 @@ def perform_test(index, row):
         "is_base_retrival": str(row.get("is_base_retrival", "true")).lower(),
         "patient_id": row.get("patient_id", "P1001####"),
     }
+    print(f"Running test index={index} with data={form_data}")
 
     # Resolve image path relative to BASE_DIR if not absolute
     files = None
@@ -73,6 +75,7 @@ def perform_test(index, row):
     attempt = 0
     while attempt <= RETRIES:
         try:
+            print(f"Test index={index} attempt={attempt + 1}")
             resp = requests.post(
                 f"{API_BASE_URL.rstrip('/')}/{ENDPOINT.lstrip('/')}",
                 data=form_data,
@@ -86,23 +89,29 @@ def perform_test(index, row):
                 body = resp.text[:5000]
 
             status = resp.status_code
+            print(f"Test index={index} completed with status={status}")
             return index, status, body
 
         except Exception as e:
             attempt += 1
             if attempt > RETRIES:
+                print(f"Test index={index} failed after {RETRIES} retries: {e}")
                 return index, "REQUEST_FAILED", str(e)
             # exponential backoff before retry
             sleep_for = BACKOFF * (2 ** (attempt - 1))
             time.sleep(sleep_for)
     # unreachable
+    print(f"Test index={index} reached unreachable code.")
     return index, "REQUEST_FAILED", "Unknown error"
 
 
+
+print(f"🚀 Starting API tests with {WORKERS} workers, timeout={DEFAULT_TIMEOUT}s, retries={RETRIES}")
+print(f"Timestamp: {datetime.now().isoformat()} at the start of tests.")
 # Run tests with a ThreadPoolExecutor to allow concurrent long-running requests.
 with ThreadPoolExecutor(max_workers=WORKERS) as exec:
     futures = {exec.submit(perform_test, idx, row): idx for idx, row in df.iterrows()}
-    # futures = {exec.submit(perform_test, idx, row): idx for idx, row in df.head(1).iterrows()}
+    futures = {exec.submit(perform_test, idx, row): idx for idx, row in df.head(1).iterrows()}
     completed = 0
     for fut in as_completed(futures):
         idx = futures[fut]
@@ -122,6 +131,9 @@ with ThreadPoolExecutor(max_workers=WORKERS) as exec:
                 print(f"Checkpoint saved after {completed} tests to {OUTPUT_FILE}")
             except Exception as e:
                 print(f"Warning: failed to write checkpoint: {e}")
+
+print(f"\n🚀 Timestamp: {datetime.now().isoformat()} at the end of tests.")
+print("All tests completed.")
 
 # --- SAVE RESULTS ---
 df.to_excel(OUTPUT_FILE, index=False)

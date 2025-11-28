@@ -39,7 +39,7 @@ class ReportModel(BaseModel):
     details: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class DownloadRequest(BaseModel):
     """

@@ -234,6 +234,7 @@ def infer(
 
     # Run pipeline (synchronous)
     try:
+        print("Running model inference...")
         output = PIPE(text=messages, max_new_tokens=max_new_tokens)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Model inference failed: {e}")
@@ -270,6 +271,7 @@ def infer(
         json.dump(summary, f, indent=4)
     
     # return InferenceResult(prompt=prompt, generated_text=generated_text, raw_output=str(output))
+    print(f"Inference output saved to {filename}")
     return (data_result, filename)
 
 def replace_images(obj):
