@@ -209,6 +209,17 @@ async def diagnose(
         print(f"Error during diagnosis: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")
 
+@app.post("/get_results")
+async def get_results(file_path: str = Form(...)):
+    """
+    Fetches results from a given file path.
+    """
+    try:
+        results = utils.get_results(file_path)
+        return JSONResponse(content={"results": results})
+    except Exception as e:
+        print(f"Error fetching results: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch results: {e}")
 
 @app.post("/retrieve_and_generate")
 async def retrieve_and_generate(image: UploadFile = File(...)):
