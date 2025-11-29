@@ -18,13 +18,13 @@ OUTPUT_FILE = BASE_DIR / f"api_test_results_{datetime.now().strftime('%Y%m%d_%H%
 
 # --- Resilience settings ---
 # Default total request timeout (seconds). Set via env API_TIMEOUT if needed.
-DEFAULT_TIMEOUT = int(os.getenv("API_TIMEOUT", "1500"))  # 25 minutes default
+DEFAULT_TIMEOUT = int(os.getenv("API_TIMEOUT", "1800"))  # 30 minutes default
 # Number of retries for transient failures
 RETRIES = int(os.getenv("API_RETRIES", "0"))
 # Backoff base seconds
 BACKOFF = float(os.getenv("API_BACKOFF", "2.0"))
 # How many tests between checkpoints
-CHECKPOINT_EVERY = int(os.getenv("API_CHECKPOINT_EVERY", "10"))
+CHECKPOINT_EVERY = int(os.getenv("API_CHECKPOINT_EVERY", "5"))
 
 
 def _safe_write(df, index, status, body):
@@ -94,7 +94,7 @@ def perform_test(index, row):
 def main():
     # --- LOAD CSV ---
     df = pd.read_csv(INPUT_FILE)
-    df = df.head(1)  # For quick testing, remove or adjust as needed
+    # df = df.head(1)  # For quick testing, remove or adjust as needed
     print(f"Loaded {len(df)} test cases from {INPUT_FILE}")
 
     # --- Prepare output columns ---
@@ -115,6 +115,7 @@ def main():
         # checkpoint to disk every CHECKPOINT_EVERY completed tests
         if completed % CHECKPOINT_EVERY == 0 or completed == total:
             try:
+                OUTPUT_FILE = BASE_DIR / f"api_test_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
                 df.to_excel(OUTPUT_FILE, index=False)
                 print(f"Checkpoint saved after {completed} tests to {OUTPUT_FILE}")
             except Exception as e:
