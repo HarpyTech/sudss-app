@@ -179,7 +179,7 @@ async def diagnose(
                 print(f"Loaded metadata for patient ID: {patient_id}")
         prepare_context = summarize(
             file=image_data,
-            is_base_retrival=is_base_retrival,
+            is_base_retrival=False,
             patient_id=patient_id,
             patient_context=patient_context,
             corrections=corrections,

@@ -168,12 +168,12 @@
                         </div>
 
                         <!-- Is Base Checkbox -->
-                        <div class="flex items-center space-x-2 pt-2">
+                        <!-- <div class="flex items-center space-x-2 pt-2">
                             <input id="is-base-report" name="is-base-report" type="checkbox"
                                 class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                             <label for="is-base-report" class="block text-sm font-medium text-gray-900"> Use Hybrid
                                 Retrieval ?</label>
-                        </div>
+                        </div> -->
 
                         <!-- Simplified File Upload Area -->
                         <div>
@@ -496,7 +496,7 @@
                 const formData = new FormData();
                 if (selectedFile) formData.append('image', selectedFile);
                 formData.append('text', text ? text : 'Describe the given Image');
-                formData.append('is_base_retrival', document.getElementById('is-base-report').checked ? 'true' : 'false');
+                formData.append('is_base_retrival', document.getElementById('is-base-report')?.checked ? 'true' : 'false');
                 formData.append('patient_id', document.getElementById('patient-id').value.trim() || 'P1001####');
 
 
