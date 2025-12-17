@@ -198,20 +198,19 @@ def infer(
         Get the patient name from the Patient History Meta Data first_name and last_name if available, else use 'Test Patient'.
         Provide the report in the following Markdown format:
         
-        ### **Patient Name:** [Patient Name <If not available, write 'Test Patient'>]
+        ### **Patient Name:** [Patient Name from the metadata]
         ## Summary on the X-ray Image:
-        [detailed summary here in 3 - 5 lines]
+        [detailed summary here in 3 lines]
         ### Findings
-        [detailed findings in a bullet list here min 3 points]
+        [detailed findings in a bullet list here min 3 points and max 5 points]
         ### Impression
-        [detailed impression in a bullet list here min 3 points]
+        [detailed impression in a bullet list here min 3 points  and max 5 points]
  
         [If there are no abnormal findings, clearly state that the X-ray appears normal.]
         ## Overall Summary:
         [detailed summary on what are the improvements or deteriorations observed 
         from previous history. Compare to previous  history, and summarize Patient recovery satate as improving, 
-        stable or worsening with respect to previous history if available 
-        else write 'No previous history available to compare'. and provide reasoning for the same. & 
+        stable or worsening with respect to previous history. and provide reasoning for the same. & 
         suggestions for further management or follow-up if necessary. in 3 - 5 lines]
 
         [IMPORTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.

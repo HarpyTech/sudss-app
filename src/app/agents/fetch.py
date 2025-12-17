@@ -280,26 +280,26 @@ def summarize(file: bytes, patient_id: str, patient_context: str,
 
     prompt = assemble_prompt_from_reports(context_reports, query_projection=None)
 
-    if is_base_retrival:
-        prompt += f"""Now given the patient history context below
-        — be concise and mention uncertainty where appropriate.
-        Patient History Context:
-        Patinet ID: {patient_id}
-        {patient_context} """
+    # if is_base_retrival:
+    prompt += f"""Now given the patient history context below
+    — be concise and mention uncertainty where appropriate.
+    Patient History Context:
+    Patinet ID: {patient_id}
+    {patient_context} """
 
-    if corrections:
-        prompt += f"""
-        Additionally, please incorporate the following corrections into your report:
-        {corrections}
+    # if corrections:
+    prompt += f"""
+    Additionally, please incorporate the following corrections into your report:
+    {corrections}
 
-        Previous Summary:
-        {previous_summary}
-        """
-    if text:
-        prompt += f"""
-        Furthermore, please consider the following additional information as clinician notes:
-        {text}
-        """
+    Previous Summary:
+    {previous_summary}
+    """
+    # if text:
+    prompt += f"""
+    Furthermore, please consider the following additional information as clinician notes:
+    {text}
+    """
 
     print("✅ Prompt assembled.")
 

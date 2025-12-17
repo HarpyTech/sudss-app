@@ -1,0 +1,30 @@
+{
+    "output": [
+        {
+            "role": "system",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "\n        You are an expert radiologist. \n        Explain how the summarization was defined with respect to the given X-ray.\n        Provide the Findings, Impression, and Suggestion sections in detail.\n        Strictly avoid making up any findings that are not visible in the image.\n        Get the patient name from the Patient History Meta Data first_name and last_name if available, else use 'Test Patient'.\n        Provide the report in the following Markdown format:\n        \n        ### **Patient Name:** [Patient Name <If not available, write 'Test Patient'>]\n        ## Summary on the X-ray Image:\n        [detailed summary here in 3 - 5 lines]\n        ### Findings\n        [detailed findings in a bullet list here min 3 points]\n        ### Impression\n        [detailed impression in a bullet list here min 3 points]\n \n        [If there are no abnormal findings, clearly state that the X-ray appears normal.]\n        ## Overall Summary:\n        [detailed summary on what are the improvements or deteriorations observed \n        from previous history. Compare to previous  history, and summarize Patient recovery satate as improving, \n        stable or worsening with respect to previous history if available \n        else write 'No previous history available to compare'. and provide reasoning for the same. & \n        suggestions for further management or follow-up if necessary. in 3 - 5 lines]\n\n        [IMPORTANT: Do not include any images in the report output. and striclty avoid making up any findings that are not visible in the image.\n        And follow the markdown format exactly as mentioned above. and make sure to include all sections and no repetitive.]\n        "
+                }
+            ]
+        },
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are a radiology assistant. Use the example reports below as reference.\n\n--- Example 1 | uid: 750 | projection: Lateral | score: 0.9137 ---\nFindings: The heart size is normal. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. Mild degenerative change is seen within the midthoracic spine. There is no visible free intraperitoneal air under the diaphragm.\nImpression: 1. No acute radiographic cardiopulmonary process.\n\n--- Example 2 | uid: 861 | projection: Lateral | score: 0.9135 ---\nFindings: Stable appearance of the right aortic XXXX. Normal heart size. No pneumothorax, pleural effusion or suspicious focal airspace opacity.\nImpression: Stable exam with known right aortic XXXX.\n\n--- Example 3 | uid: 456 | projection: Lateral | score: 0.9106 ---\nFindings: PA and lateral radiograph the chest demonstrate stable cardiomediastinal silhouette. No focal consolidation, large pleural effusion, or pneumothorax is identified. Evidence of prior granulomatous disease. Visualized osseous structures appear intact.\nImpression: No acute cardiopulmonary abnormality.\n\n--- Example 4 | uid: 644 | projection: Lateral | score: 0.9089 ---\nFindings: The cardiac contours are normal. The lungs are clear. Thoracic spondylosis.\nImpression: No evidence of active pulmonary pneumonia on today's exam.\n\n--- Example 5 | uid: 778 | projection: Lateral | score: 0.9075 ---\nFindings: Cardiomediastinal silhouettes are within normal limits. Lungs are clear without focal consolidation, pneumothorax, or pleural effusion. Stable calcified granulomas. Bony thorax is unremarkable.\nImpression: No acute cardiopulmonary abnormalities.\n\n\n        Furthermore, please consider the following additional information as clinician notes:\n        Describe the given Image\n        "
+                },
+                {
+                    "type": "image",
+                    "image": "C:/Users/lokesh-g/Desktop/sudss-app/src/app/agents/static/inputs_images/input_image_20251214_075442.png"
+                }
+            ]
+        },
+        {
+            "role": "assistant",
+            "content": "The image is a lateral chest X-ray. The heart size appears normal. The mediastinal contour is within normal limits. The lungs are clear. There are no obvious focal infiltrates, nodules, or masses. No pneumothorax or pleural effusion is visible. The visualized osseous structures appear unremarkable.\n\n### **Patient Name:** Test Patient\n## Summary on the X-ray Image:\nThe lateral chest X-ray shows a normal cardiomediastinal silhouette and clear lungs. No acute cardiopulmonary abnormalities are identified.\n\n### Findings\n*   The heart size is normal.\n*   The mediastinal contour is within normal limits.\n*   The lungs are clear without focal consolidation, pneumothorax, or pleural effusion.\n*   No nodules or masses are visible.\n*   No visible free intraperitoneal air under the diaphragm.\n\n### Impression\n*   No acute radiographic cardiopulmonary process.\n\n## Overall Summary:\nThe X-ray appears normal. No previous history available to compare. No improvements or deteriorations observed from previous history. No suggestions for further management or follow-up are necessary.\n"
+        }
+    ]
+}
