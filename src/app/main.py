@@ -66,11 +66,11 @@ async def lifespan(app: FastAPI):
     print("Google Generative AI client configured.")
 
     print("Preparing the Medgemma model...  This may take a while.")
-    load_pipeline_at_startup()
+    # load_pipeline_at_startup()
     print("Medgemma model is ready.")
 
     print("Loading FAISS index and metadata...")
-    startup_load()
+    # startup_load()
     print("FAISS index and metadata loaded.")
 
     # Prefer a module-relative absolute path so the server can be started from anywhere
@@ -95,7 +95,7 @@ async def lifespan(app: FastAPI):
     if not mongo_uri:
         raise RuntimeError("MONGO_URI environment variable not set.")
     try:
-        me.connect(host=mongo_uri)
+        # me.connect(host=mongo_uri)
         print("Successfully connected to MongoDB Atlas.")
     except Exception as e:
         print(f"Failed to connect to MongoDB Atlas: {e}")
@@ -105,7 +105,7 @@ async def lifespan(app: FastAPI):
     finally:
         # SHUTDOWN
         try:
-            me.disconnect()
+            # me.disconnect()
             print("Disconnected from MongoDB.")
         except Exception:
             pass

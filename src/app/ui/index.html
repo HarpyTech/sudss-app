@@ -441,11 +441,11 @@
             };
 
             // --- FILE HANDLING ---
-            fileUploadArea.addEventListener('click', () => fileInput.click());
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, e => {e.preventDefault(); e.stopPropagation();}));
-            ['dragenter', 'dragover'].forEach(evName => fileUploadArea.addEventListener(evName, () => fileUploadArea.classList.add('border-indigo-500', 'bg-indigo-50')));
-            ['dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, () => fileUploadArea.classList.remove('border-indigo-500', 'bg-indigo-50')));
-            fileUploadArea.addEventListener('drop', e => {fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change', {bubbles: true}));});
+            // fileUploadArea.addEventListener('click', () => fileInput.click());
+            // ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, e => {e.preventDefault(); e.stopPropagation();}));
+            // ['dragenter', 'dragover'].forEach(evName => fileUploadArea.addEventListener(evName, () => fileUploadArea.classList.add('border-indigo-500', 'bg-indigo-50')));
+            // ['dragleave', 'drop'].forEach(evName => fileUploadArea.addEventListener(evName, () => fileUploadArea.classList.remove('border-indigo-500', 'bg-indigo-50')));
+            // fileUploadArea.addEventListener('drop', e => {fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change', {bubbles: true}));});
             fileInput.addEventListener('change', () => {
                 if (fileInput.files.length > 0) {selectedFile = fileInput.files[0]; fileUploadText.textContent = selectedFile.name; showToast('File selected: ' + selectedFile.name);}
             });
