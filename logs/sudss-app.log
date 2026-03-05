@@ -1,0 +1,9 @@
+2026-03-06T08:12:14Z ERROR sudss-api DiagnosisController.py:78 - Failed to process clinical input. patient_id=P1024 reason="Missing lab report attachment"
+
+2026-03-06T08:16:03Z ERROR sudss-ml InferenceEngine.py:132 - Model inference failed for uploaded X-ray image. patient_id=P1031 model=bio-diagnosis-v2 error="Tensor dimension mismatch"
+
+2026-03-06T08:19:47Z ERROR sudss-rag RetrievalService.py:54 - Vector search returned empty context for query. patient_id=P1042 embedding_index=clinical_docs query="persistent chest pain"
+
+2026-03-06T08:22:10Z ERROR sudss-api ReportGenerator.py:91 - Failed to generate diagnosis summary. patient_id=P1045 error="Gemini API timeout after 30s"
+
+2026-03-06T08:25:55Z ERROR sudss-db PatientRepository.py:46 - Database write failed while storing diagnosis result. patient_id=P1050 error="PostgreSQL deadlock detected"
