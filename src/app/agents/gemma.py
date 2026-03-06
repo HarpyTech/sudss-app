@@ -10,9 +10,26 @@ from pydantic import BaseModel
 from PIL import Image
 import torch
 from huggingface_hub import login
-from transformers import pipeline, BitsAndBytesConfig, logging
+from transformers import pipeline, BitsAndBytesConfig, logging as hf_logging
 
-logging.set_verbosity_error()
+hf_logging.set_verbosity_error()
+
+import logging
+
+try:
+    from logger_config import get_logger
+except ImportError:
+    logging.basicConfig(
+        format=(
+            "%(asctime)s - %(name)s - %(levelname)s"
+            " - [%(filename)s:%(funcName)s:%(lineno)d] - %(message)s"
+        ),
+        stream=sys.stdout,
+        level=logging.INFO,
+    )
+    get_logger = logging.getLogger
+
+logger = get_logger(__name__)
 
 app = FastAPI(title="MedGemma FastAPI")
 
@@ -39,18 +56,20 @@ def prepare_model(model_variant: str = "4b-it", use_quant: bool = True, hf_token
     if use_cuda:
         device = 0
         device_map = "auto"
-        print("CUDA available -> will attempt GPU (device_map='auto').")
+        logger.info("prepare_model: CUDA available – using GPU (device_map='auto').")
     else:
         device = "cpu"
         device_map = "cpu"
-        print("No CUDA -> using CPU.")
+        logger.info("prepare_model: no CUDA detected – using CPU.")
 
     quant_config = None
     if use_quant and use_cuda:
         quant_config = BitsAndBytesConfig(load_in_4bit=True)
-        print("4-bit quantization enabled (bitsandbytes).")
+        logger.info("prepare_model: 4-bit quantization enabled (bitsandbytes).")
     elif use_quant and not use_cuda:
-        print("Warning: 4-bit quant requested but no CUDA available; ignoring quantization.")
+        logger.warning(
+            "prepare_model: 4-bit quantization requested but no CUDA available; ignoring."
+        )
 
     model_kwargs = dict(
         torch_dtype=torch.bfloat16 if use_cuda else torch.float32,
@@ -64,7 +83,10 @@ def prepare_model(model_variant: str = "4b-it", use_quant: bool = True, hf_token
         pipe = pipeline(task_name, model=model_id, model_kwargs=model_kwargs)
     except Exception as e:
         # fallback: try simpler load without model_kwargs
-        print("Model load failed with model_kwargs — retrying with simpler config...", file=sys.stderr)
+        logger.warning(
+            "prepare_model: initial pipeline load failed (%s) – retrying with simpler config.",
+            e,
+        )
         pipe = pipeline(task_name, model=model_id)
 
     # try to enforce deterministic behavior
@@ -89,9 +111,14 @@ def load_pipeline_at_startup():
 
     try:
         PIPE = prepare_model(model_variant=model_variant, use_quant=use_quant, hf_token=hf_token)
-        print("Model loaded and ready.")
+        logger.info("load_pipeline_at_startup: model '%s' loaded and ready.", model_variant)
     except Exception as e:
-        print("Failed to load model during startup:", e, file=sys.stderr)
+        logger.error(
+            "load_pipeline_at_startup: failed to load model '%s': %s",
+            model_variant,
+            e,
+            exc_info=True,
+        )
         # keep PIPE as None so endpoint returns helpful error
         PIPE = None
 
@@ -131,7 +158,12 @@ def pil_image_to_base64(image: Image.Image, format: str = "PNG") -> str:
             b64 = base64.b64encode(buffer.getvalue()).decode("ascii")
             return f"data:image/{ext};base64,{b64}"
         except Exception as e2:
-            print(f"Error saving or encoding image: {e}; fallback error: {e2}")
+            logger.error(
+                "pil_image_to_base64: failed to save image to disk (%s) and base64 fallback also failed: %s",
+                e,
+                e2,
+                exc_info=True,
+            )
             return ""
 
 def convert_images_to_base64(data):
@@ -172,20 +204,27 @@ def infer(
     try:
         if PIPE is None:
             PIPE = prepare_model(model_variant=model_variant, use_quant=use_quant, hf_token=hf_token)
-        print("Model loaded and ready.")
+        logger.info("infer: model '%s' is ready.", MODEL_ID)
     except Exception as e:
-        print("Failed to load model during startup:", e, file=sys.stderr)
+        logger.error(
+            "infer: failed to load model '%s': %s",
+            model_variant,
+            e,
+            exc_info=True,
+        )
         # keep PIPE as None so endpoint returns helpful error
         PIPE = None
 
 
     if PIPE is None:
+        logger.error("infer: pipeline is None – model was not loaded successfully.")
         raise HTTPException(status_code=503, detail="Model not loaded. Check server logs / HF token.")
 
     # read file bytes and convert to PIL image
     try:
         image = Image.open(BytesIO(file)).convert("RGB")
     except Exception as e:
+        logger.error("infer: failed to decode image bytes: %s", e, exc_info=True)
         raise HTTPException(status_code=400, detail=f"Unable to read image file: {e}")
 
     # Build messages same shape your script used
@@ -235,9 +274,10 @@ def infer(
 
     # Run pipeline (synchronous)
     try:
-        print("Running model inference...")
+        logger.info("infer: running model inference (max_new_tokens=%d).", max_new_tokens)
         output = PIPE(text=messages, max_new_tokens=max_new_tokens)
     except Exception as e:
+        logger.error("infer: model inference failed: %s", e, exc_info=True)
         raise HTTPException(status_code=500, detail=f"Model inference failed: {e}")
 
     # Attempt to extract generated text similar to your script
@@ -254,7 +294,7 @@ def infer(
     
     content = dict(generated_text)
 
-    print("Type of generated_text:", type(generated_text))
+    logger.debug("infer: generated_text type=%s", type(generated_text).__name__)
     # save to json file on current directory
     import json
     import datetime
@@ -272,7 +312,7 @@ def infer(
         json.dump(summary, f, indent=4)
     
     # return InferenceResult(prompt=prompt, generated_text=generated_text, raw_output=str(output))
-    print(f"Inference output saved to {filename}")
+    logger.info("infer: inference output saved to '%s'.", filename)
     return (data_result, filename)
 
 def replace_images(obj):
