@@ -1,7 +1,7 @@
 import os
 import random
 from typing import Optional, List
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends, Body
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends
 from fastapi.responses import JSONResponse, StreamingResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -24,14 +24,7 @@ from typing import Dict, Any
 
 from agents.fetch import summarize, load_metadata_jsonl, startup_load
 from agents.gemma import load_pipeline_at_startup, infer, convert_images_to_base64
-from agents.rca_agent import analyze as rca_analyze
 from logger_config import configure_logging, get_logger
-
-
-class RCARequest(BaseModel):
-    """Request body for the /rca root-cause analysis endpoint."""
-
-    log_message: str
 
 # --- Load Environment Variables ---
 # This will load the variables from the .env file
@@ -411,53 +404,6 @@ async def get_reports():
         return [report.to_dict() for report in reports]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch reports: {e}")
-
-
-@app.post("/rca")
-async def root_cause_analysis(request: RCARequest):
-    """
-    Root Cause Analysis endpoint.
-
-    Accepts a JSON body ``{"log_message": "..."}`` where the value is a
-    structured application log line or a plain Python traceback, and returns:
-
-    - **parsed_location** – the file, function, and line extracted from the log.
-    - **code_context** – the surrounding source code snippet at that location.
-    - **analysis** – an LLM-generated root-cause analysis with a suggested fix.
-
-    Sample inputs you can POST to this endpoint for testing:
-
-    **Structured INFO log:**
-    ```json
-    {"log_message": "2026-03-06 12:00:00,000 - app.agents.fetch - INFO - [fetch.py:summarize:241] - Prepared context for inference."}
-    ```
-
-    **Structured ERROR log:**
-    ```json
-    {"log_message": "2026-03-06 12:05:00,000 - app.main - ERROR - [main.py:diagnose:208] - Error during diagnosis: HTTPException(status_code=500, detail='Model not loaded')"}
-    ```
-
-    **Python traceback:**
-    ```json
-    {"log_message": "Traceback (most recent call last):\\n  File \\"src/app/agents/gemma.py\\", line 239, in infer\\n    output = PIPE(text=messages, max_new_tokens=max_new_tokens)\\nRuntimeError: CUDA out of memory."}
-    ```
-    """
-    logger.info(
-        "rca: received log message for analysis (length=%d).",
-        len(request.log_message),
-    )
-    try:
-        result = rca_analyze(request.log_message)
-        return JSONResponse(
-            content={
-                "parsed_location": result["parsed_location"],
-                "code_context": result["code_context"],
-                "analysis": result["analysis"],
-            }
-        )
-    except Exception as e:
-        logger.error("rca: analysis failed: %s", e, exc_info=True)
-        raise HTTPException(status_code=500, detail=f"RCA analysis failed: {e}")
 
 
 # To run this application:
