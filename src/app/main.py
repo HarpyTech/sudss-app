@@ -24,10 +24,16 @@ from typing import Dict, Any
 
 from agents.fetch import summarize, load_metadata_jsonl, startup_load
 from agents.gemma import load_pipeline_at_startup, infer, convert_images_to_base64
+from logger_config import configure_logging, get_logger
 
 # --- Load Environment Variables ---
 # This will load the variables from the .env file
 load_dotenv()
+
+# Initialise structured logging as early as possible so all subsequent log
+# lines include file / function / line metadata for the RCA Agent.
+configure_logging()
+logger = get_logger(__name__)
 
 # --- App Initialization ---
 app = FastAPI(title="Clinical Diagnosis AI Suite")
@@ -63,15 +69,15 @@ async def lifespan(app: FastAPI):
     if not google_api_key:
         raise RuntimeError("GOOGLE_API_KEY environment variable not set.")
     genai.configure(api_key=google_api_key)
-    print("Google Generative AI client configured.")
+    logger.info("lifespan: Google Generative AI client configured.")
 
-    print("Preparing the Medgemma model...  This may take a while.")
+    logger.info("lifespan: loading MedGemma model – this may take a while.")
     load_pipeline_at_startup()
-    print("Medgemma model is ready.")
+    logger.info("lifespan: MedGemma model is ready.")
 
-    print("Loading FAISS index and metadata...")
+    logger.info("lifespan: loading FAISS index and metadata.")
     startup_load()
-    print("FAISS index and metadata loaded.")
+    logger.info("lifespan: FAISS index and metadata loaded.")
 
     # Prefer a module-relative absolute path so the server can be started from anywhere
     metadata_path = os.path.abspath(
@@ -86,7 +92,13 @@ async def lifespan(app: FastAPI):
     # store loaded metadata on the app.state so route handlers can access it reliably
     try:
         app.state.METADATA_HISTORY = utils.load_json_file(metadata_path)
-    except Exception:
+        logger.info("lifespan: patient history metadata loaded from '%s'.", metadata_path)
+    except Exception as exc:
+        logger.warning(
+            "lifespan: could not load patient metadata from '%s': %s – proceeding with empty store.",
+            metadata_path,
+            exc,
+        )
         # fallback to empty dict to avoid attribute errors in routes
         app.state.METADATA_HISTORY = {}
 
@@ -96,9 +108,9 @@ async def lifespan(app: FastAPI):
         raise RuntimeError("MONGO_URI environment variable not set.")
     try:
         me.connect(host=mongo_uri)
-        print("Successfully connected to MongoDB Atlas.")
+        logger.info("lifespan: successfully connected to MongoDB Atlas.")
     except Exception as e:
-        print(f"Failed to connect to MongoDB Atlas: {e}")
+        logger.error("lifespan: failed to connect to MongoDB Atlas: %s", e, exc_info=True)
 
     try:
         yield
@@ -106,7 +118,7 @@ async def lifespan(app: FastAPI):
         # SHUTDOWN
         try:
             me.disconnect()
-            print("Disconnected from MongoDB.")
+            logger.info("lifespan: disconnected from MongoDB.")
         except Exception:
             pass
 
@@ -156,12 +168,16 @@ async def diagnose(
     image_data = await image.read() if image else None
     patient_context = None
 
-    print("Starting diagnosis process...")
-    print(
-        f"Received parameters - is_base_retrival: {is_base_retrival}, patient_id: {patient_id}, corrections: {corrections is not None}, previous_summary: {previous_summary is not None}"
-    )
-    print(
-        f"Image data size: {len(image_data) if image_data else 'No image provided'}, Text data size: {len(text) if text else 'No text provided'} "
+    logger.info(
+        "diagnose: starting diagnosis – patient_id=%s is_base_retrival=%s "
+        "has_corrections=%s has_previous_summary=%s "
+        "image_bytes=%s text_bytes=%s",
+        patient_id,
+        is_base_retrival,
+        corrections is not None,
+        previous_summary is not None,
+        len(image_data) if image_data else 0,
+        len(text) if text else 0,
     )
 
     # return JSONResponse(content={"summary": {"output": "Debugging - process halted"}})
@@ -173,10 +189,13 @@ async def diagnose(
                 patient_id, "No relevant patient history found."
             )
             if patient_context is None:
-                print(f"No metadata found for patient ID: {patient_id}")
+                logger.warning(
+                    "diagnose: no patient history found for patient_id='%s'."
+                    " Proceeding without patient context.",
+                    patient_id,
+                )
             else:
-                # print(f"Patient context of the patient is : {patient_context}")
-                print(f"Loaded metadata for patient ID: {patient_id}")
+                logger.info("diagnose: loaded patient history for patient_id='%s'.", patient_id)
         prepare_context = summarize(
             file=image_data,
             is_base_retrival=False,
@@ -187,26 +206,21 @@ async def diagnose(
             text=text
         )
         result = None
-        print("Prepared context for inference." + type(prepare_context).__name__)
+        logger.info(
+            "diagnose: context prepared (type=%s) – starting model inference.",
+            type(prepare_context).__name__,
+        )
         result, file = infer(image_data, prepare_context)
         summary = result  # .generated_text
-        print("Type of Summary:", type(summary))
-        # print("Generated Summary:", summary)
-        print("Replacing images in the summary...")
-        print("File data for image conversion:", file)
+        logger.debug("diagnose: inference complete – summary type=%s.", type(summary).__name__)
+        logger.debug("diagnose: converting embedded images to base64 paths.")
         summary = convert_images_to_base64(summary)
-        # print("Final Summary after replacing images:", summary)
-        print("Diagnosis process completed.")
-        # import json
-        # file = "C:\\Users\\lokesh-g\\Desktop\\sudss-app\\inference_output_20251020_160742.json"
-        # with open(file, "r", encoding='utf-8') as f:
-        #     summary = f.read()
-        #     summary = json.loads(summary)
+        logger.info("diagnose: diagnosis completed – result file='%s'.", file)
         # summary = llm_services.generate_summary(image_data=image_data, text_data=text)
         return JSONResponse(content={"summary": utils.get_results(file)})
         # return JSONResponse(content={"summary": utils.get_results("./misc/inference_output_20251102_062025.json")})
     except Exception as e:
-        print(f"Error during diagnosis: {e}")
+        logger.error("diagnose: error during diagnosis: %s", e, exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to generate summary: {e}")
 
 @app.post("/get_results")
@@ -218,7 +232,7 @@ async def get_results(file_path: str = Form(...)):
         results = utils.get_results(file_path)
         return JSONResponse(content={"results": results})
     except Exception as e:
-        print(f"Error fetching results: {e}")
+        logger.error("get_results: error fetching results from '%s': %s", file_path, e, exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to fetch results: {e}")
 
 @app.post("/retrieve_and_generate")
@@ -240,7 +254,7 @@ async def retrieve_and_generate(image: UploadFile = File(...)):
             hf_token=os.getenv("HF_TOKEN"),
         )
         try:
-            print("Retrieve and Generate Result:", result)
+            logger.debug("retrieve_and_generate: result=%s", result)
 
             return JSONResponse(content={"result": result})
         except Exception as e:

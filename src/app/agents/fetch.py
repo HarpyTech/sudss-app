@@ -23,6 +23,26 @@ from transformers import (
 )
 import faiss
 import os
+import sys
+import logging
+
+# Use the shared logger so every log line carries file/function/line metadata
+# that the RCA Agent can use for code lookup.
+try:
+    from logger_config import get_logger
+except ImportError:
+    # Fallback when the module is imported standalone (e.g. in unit tests)
+    logging.basicConfig(
+        format=(
+            "%(asctime)s - %(name)s - %(levelname)s"
+            " - [%(filename)s:%(funcName)s:%(lineno)d] - %(message)s"
+        ),
+        stream=sys.stdout,
+        level=logging.INFO,
+    )
+    get_logger = logging.getLogger
+
+logger = get_logger(__name__)
 
 # --------------------------
 # Hardcoded configuration
@@ -110,7 +130,11 @@ def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
         db_embs.append(emb)
     db_embs = np.array(db_embs, dtype=np.float32)
 
-    print(f"Database embeddings shape: {db_embs.shape}, Query embedding shape: {q_emb.shape}")
+    logger.debug(
+        "Database embeddings shape: %s, Query embedding shape: %s",
+        db_embs.shape,
+        q_emb.shape,
+    )
 
 
     # Normalize
@@ -128,7 +152,11 @@ def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
     hybrid_score = alpha * cos_sim + beta * dot_sim + gamma * inv_euc_sim
 
     # Apply threshold
-    print(f"Hybrid scores range: min {hybrid_score.min()}, max {hybrid_score.max()}")
+    logger.debug(
+        "Hybrid scores range: min=%.4f max=%.4f",
+        hybrid_score.min(),
+        hybrid_score.max(),
+    )
     threshold = 0.8
     # find indices where the hybrid score meets the threshold
     # np.all(...) returns a scalar for 1-D arrays, so use np.where to get indices
@@ -138,13 +166,21 @@ def retrive_topk_hybrid(q_emb: np.ndarray, k: int):
         valid_indices = np.arange(hybrid_score.shape[0])
 
     # Sort and select top-K
-    print(f"Total valid indices above threshold: {len(valid_indices)}")
+    logger.debug(
+        "Total valid indices above threshold=%.2f: %d",
+        threshold,
+        len(valid_indices),
+    )
     sorted_indices = valid_indices[np.argsort(hybrid_score[valid_indices])[::-1]]
     topk_indices = sorted_indices[:TOP_K]
     scores = hybrid_score[topk_indices]
     ids = topk_indices.tolist()
 
-    print(f"✅ Retrieved {len(topk_indices)} results above threshold {threshold}")
+    logger.info(
+        "retrive_topk_hybrid: retrieved %d results above threshold %.2f",
+        len(topk_indices),
+        threshold,
+    )
     return scores, ids
 
 
@@ -174,7 +210,12 @@ def assemble_prompt_from_reports(reports: List[Dict[str, Any]], query_projection
             if len(im) > max_len:
                 im = im[:max_len] + " ... [truncated]"
         except Exception as e:
-            print(f"Error truncating text for report {r.get('uid')}: {e}")
+            logger.error(
+                "Error truncating report text for uid=%s: %s",
+                r.get("uid"),
+                e,
+                exc_info=True,
+            )
         ctx_lines.append("Findings: " + f)
         ctx_lines.append("Impression: " + im)
         ctx_lines.append("")
@@ -184,7 +225,7 @@ def assemble_prompt_from_reports(reports: List[Dict[str, Any]], query_projection
     # ctx_lines.append("Write two sections clearly labeled 'Findings:' and 'Impression:' — be concise and mention uncertainty where appropriate.")
     ctx_lines.append("")
 
-    print("Assembled Prompt Context:")
+    logger.debug("assemble_prompt_from_reports: prompt assembled with %d reports.", len(reports))
     return "\n".join(ctx_lines)
 
 # --------------------------
@@ -215,15 +256,24 @@ def startup_load():
 
     meta_p = Path(META_PATH)
     if not meta_p.exists():
+        logger.error("startup_load: metadata file not found at '%s'.", META_PATH)
         raise RuntimeError(f"Metadata file not found at {META_PATH}")
     METADATA = load_metadata_jsonl(META_PATH)
+    logger.info("startup_load: loaded %d metadata records from '%s'.", len(METADATA), META_PATH)
 
     idx_p = Path(INDEX_PATH)
     if not idx_p.exists():
+        logger.error("startup_load: FAISS index file not found at '%s'.", INDEX_PATH)
         raise RuntimeError(f"FAISS index file not found at {INDEX_PATH}")
     FAISS_INDEX = faiss.read_index(INDEX_PATH)
+    logger.info(
+        "startup_load: FAISS index loaded from '%s' (ntotal=%d).",
+        INDEX_PATH,
+        FAISS_INDEX.ntotal,
+    )
 
     EMBEDDER = MedSigLIPEmbedder(MEDSIGLIP_MODEL, DEVICE)
+    logger.info("startup_load: MedSigLIP embedder initialised (model=%s).", MEDSIGLIP_MODEL)
 
 
 # --------------------------
@@ -239,12 +289,18 @@ def summarize(file: bytes, patient_id: str, patient_context: str,
     global FAISS_INDEX, METADATA, EMBEDDER
 
     if FAISS_INDEX is None or EMBEDDER is None:
+        logger.error(
+            "summarize: server not ready – FAISS_INDEX=%s EMBEDDER=%s",
+            FAISS_INDEX,
+            EMBEDDER,
+        )
         raise HTTPException(status_code=503, detail="Server not ready (index or models not loaded).")
 
     # read uploaded image into PIL
     try:
         pil_img = Image.open(BytesIO(file)).convert("RGB")
     except Exception as e:
+        logger.error("summarize: failed to decode uploaded image: %s", e, exc_info=True)
         raise HTTPException(status_code=400, detail=f"Could not read image: {e}")
 
     # 1) Embed
@@ -254,10 +310,10 @@ def summarize(file: bytes, patient_id: str, patient_context: str,
     # 2) Retrieve top-k
     # scores, ids = retrive_topk_hybrid(q_emb, TOP_K) if is_base_retrival else retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
     if is_base_retrival == False:
-        print("Using base retrieval...")
+        logger.info("summarize: using standard FAISS retrieval (patient_id=%s).", patient_id)
         scores, ids = retrieve_topk(FAISS_INDEX, q_emb, TOP_K)
     else:
-        print("Using hybrid retrieval...")
+        logger.info("summarize: using hybrid retrieval (patient_id=%s).", patient_id)
         scores, ids = retrive_topk_hybrid(q_emb, TOP_K)
     # 3) Map ids -> metadata
     results = []
@@ -270,13 +326,13 @@ def summarize(file: bytes, patient_id: str, patient_context: str,
         m.setdefault("impression", "")
         results.append(m)
 
-    print(f"✅ Retrieved {len(results)} reports from metadata.")
+    logger.info("summarize: retrieved %d reports from metadata.", len(results))
 
     # 4) Compose prompt
     top_n = min(MAX_CONTEXT_REPORTS, len(results))
     context_reports = results[:top_n]
 
-    print("Assembling prompt from retrieved reports...")
+    logger.debug("summarize: assembling prompt from %d context reports.", top_n)
 
     prompt = assemble_prompt_from_reports(context_reports, query_projection=None)
 
@@ -301,6 +357,6 @@ def summarize(file: bytes, patient_id: str, patient_context: str,
     {text}
     """
 
-    print("✅ Prompt assembled.")
+    logger.info("summarize: prompt assembled successfully for patient_id=%s.", patient_id)
 
     return prompt
